@@ -4314,7 +4314,7 @@
       saved[name] = cloneLevel(editorLevel);
       writeSavedLevels(saved);
       refreshSavedLevelsSelect(name);
-      gameMessage.textContent = `Сохранено: ${name}`;
+      gameMessage.textContent = `Уровень успешно сохранён: ${name}`;
     }
 
     function loadSelectedLevel() {
@@ -4411,7 +4411,7 @@
       writeUserLevels(userLevels);
       selectedUserLevelName = name;
       refreshUserLevelsSelect(name);
-      gameMessage.textContent = `Опубликовано: ${name} (${profile.nickname})`;
+      gameMessage.textContent = `Уровень успешно опубликован: ${name}`;
     }
 
     function playSelectedUserLevel(forcedName = '') {
