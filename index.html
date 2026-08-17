@@ -284,8 +284,46 @@
       display: grid;
       gap: 12px;
       max-height: 360px;
+      min-height: 240px;
       overflow: auto;
       padding-right: 6px;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    [data-screen="user-levels"] .menu-panel > div:first-child {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    [data-screen="user-levels"] .menu-actions {
+      margin-top: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(16px);
+      min-width: min(420px, calc(100vw - 24px));
+      max-width: calc(100vw - 24px);
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(4, 16, 26, 0.94);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      z-index: 40;
+      text-align: center;
+    }
+
+    .toast.open {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     .level-card {
@@ -1005,7 +1043,7 @@
       .menu-panel {
         grid-template-columns: 1fr;
         max-height: none;
-        overflow: visible;
+        overflow: auto;
       }
 
       .title {
@@ -1099,7 +1137,8 @@
       }
 
       .level-list {
-        max-height: 300px;
+        max-height: 320px;
+        min-height: 220px;
       }
 
       .level-card-row {
@@ -1191,7 +1230,7 @@
           <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Community Levels</p>
           <h1 class="title">User<br>Levels</h1>
           <p class="subtitle">
-            Выбери опубликованный уровень другого игрока. Пока это локальная основа для будущей браузерной публикации.
+            Выбери опубликованный уровень другого игрока. Список загружается из общей онлайн-базы и должен быть одинаковым на разных устройствах.
           </p>
           <div class="field level-search">
             <label for="userLevelsSearch">Поиск по названию</label>
@@ -1634,6 +1673,8 @@
     </div>
   </div>
 
+  <div class="toast" id="toastMessage" aria-live="polite"></div>
+
   <script>
     const screens = {
       menu: document.querySelector('[data-screen="menu"]'),
@@ -1652,6 +1693,7 @@
     const editorCtx = editorCanvas.getContext('2d');
     const progressLabel = document.getElementById('progressLabel');
     const gameMessage = document.getElementById('gameMessage');
+    const toastMessage = document.getElementById('toastMessage');
     const finishOverlay = document.getElementById('finishOverlay');
     const finishTitle = document.getElementById('finishTitle');
     const finishSubtitle = document.getElementById('finishSubtitle');
@@ -1757,6 +1799,7 @@
     let remoteUserLevels = {};
     let userLevelsLoading = false;
     let legacyPublishMigrationPromise = null;
+    let toastTimer = 0;
 
     const musicLibrary = {
       'pulse-run': {
@@ -2294,6 +2337,22 @@
           }
         }
       }));
+    }
+
+    function showToast(message) {
+      toastMessage.textContent = message;
+      toastMessage.classList.add('open');
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => {
+        toastMessage.classList.remove('open');
+      }, 2600);
+    }
+
+    function setStatus(message, options = {}) {
+      gameMessage.textContent = message;
+      if (options.toast || !screens.game.classList.contains('active')) {
+        showToast(message);
+      }
     }
 
     function currentSkin() {
@@ -4948,12 +5007,12 @@
     async function publishSelectedLevel() {
       const name = savedLevelsSelect.value;
       if (!name) {
-        gameMessage.textContent = 'Сначала выбери сохранённый уровень';
+        setStatus('Сначала выбери сохранённый уровень', { toast: true });
         return;
       }
       const profile = readProfile();
       if (!profile.locked || !profile.nickname) {
-        gameMessage.textContent = 'Сначала задай ник в профиле';
+        setStatus('Сначала задай ник в профиле', { toast: true });
         showScreen('profile');
         return;
       }
@@ -4961,13 +5020,14 @@
       const level = savedLevels[name];
       if (!level) {
         refreshSavedLevelsSelect();
-        gameMessage.textContent = 'Сохранение не найдено';
+        setStatus('Сохранение не найдено', { toast: true });
         return;
       }
       if (!isEditorLevelVerified() || levelSignature(level) !== verifiedEditorLevelSignature) {
-        gameMessage.textContent = 'Уровень не проверен: сначала пройди эту версию и ничего не меняй после прохождения';
+        setStatus('Уровень не проверен: сначала пройди эту версию и ничего не меняй после прохождения', { toast: true });
         return;
       }
+      setStatus(`Публикуем уровень: ${name}...`, { toast: true });
       const publishedAt = formatPublishedDate(new Date().toISOString());
       const userLevels = readLocalUserLevels();
       const record = {
@@ -4991,7 +5051,8 @@
         };
       } catch (error) {
         console.warn('Failed to publish level to Supabase', error);
-        gameMessage.textContent = 'Не удалось опубликовать уровень в сеть. Проверь интернет и попробуй ещё раз';
+        const details = error instanceof Error ? error.message : 'неизвестная ошибка';
+        setStatus(`Не удалось опубликовать уровень: ${details}`, { toast: true });
         return;
       }
       userLevels[name] = record;
@@ -5001,7 +5062,7 @@
       });
       selectedUserLevelName = name;
       refreshUserLevelsSelect(name);
-      gameMessage.textContent = `Уровень успешно опубликован: ${name}`;
+      setStatus(`Уровень успешно опубликован: ${name}`, { toast: true });
     }
 
     function playSelectedUserLevel(forcedName = '') {
