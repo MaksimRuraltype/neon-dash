@@ -54,6 +54,7 @@
       inset: 0;
       display: none;
       padding: 24px;
+      overflow: auto;
     }
 
     .screen.active {
@@ -93,6 +94,8 @@
       grid-template-columns: 1.1fr 0.9fr;
       gap: 24px;
       padding: 32px;
+      max-height: calc(100vh - 48px);
+      overflow: auto;
     }
 
     .title {
@@ -323,6 +326,60 @@
       justify-content: space-between;
       gap: 12px;
       margin-top: 12px;
+    }
+
+    .skin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .skin-card {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.045);
+      cursor: pointer;
+    }
+
+    .skin-card.locked {
+      opacity: 0.62;
+      cursor: default;
+    }
+
+    .skin-card.active {
+      border-color: rgba(57, 243, 210, 0.95);
+      background: rgba(57, 243, 210, 0.12);
+    }
+
+    .skin-preview {
+      width: 52px;
+      height: 52px;
+      margin-bottom: 10px;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skin-card h4,
+    .skin-card p {
+      margin: 0;
+    }
+
+    .skin-card h4 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .skin-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
     }
 
     .editor-layout {
@@ -908,6 +965,157 @@
         padding: 16px;
         border-radius: 20px;
       }
+
+      .menu-panel {
+        max-height: none;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .side-panel {
+        max-height: 46vh;
+      }
+    }
+
+    @media (max-width: 640px) {
+      html,
+      body,
+      .app {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .screen {
+        padding: 8px;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      .menu-panel,
+      .game-panel,
+      .editor-panel {
+        width: 100%;
+        padding: 12px;
+        border-radius: 16px;
+        gap: 12px;
+      }
+
+      .menu-panel {
+        grid-template-columns: 1fr;
+        max-height: none;
+        overflow: visible;
+      }
+
+      .title {
+        font-size: clamp(30px, 12vw, 46px);
+        line-height: 0.96;
+      }
+
+      .subtitle {
+        font-size: 15px;
+        line-height: 1.4;
+        max-width: none;
+      }
+
+      .menu-actions,
+      .toolbar-actions,
+      .status-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .menu-actions button,
+      .toolbar-actions button,
+      .status-row .badge {
+        width: 100%;
+      }
+
+      .card-grid,
+      .skin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-card,
+      .skin-card {
+        padding: 14px;
+        border-radius: 16px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+        display: grid;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      canvas {
+        border-radius: 16px;
+      }
+
+      .hud-note {
+        font-size: 13px;
+      }
+
+      .editor-layout {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .editor-viewport {
+        order: 1;
+      }
+
+      .side-panel {
+        order: 2;
+        padding: 12px;
+        border-radius: 16px;
+        max-height: none;
+      }
+
+      .tool-section-nav {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .tool-section-btn {
+        min-height: 48px;
+      }
+
+      .tool-grid {
+        gap: 8px;
+      }
+
+      .tool-page-nav {
+        gap: 8px;
+      }
+
+      .tool-page-label {
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .level-list {
+        max-height: 300px;
+      }
+
+      .level-card-row {
+        grid-template-columns: 1fr;
+        display: grid;
+        justify-content: stretch;
+      }
+
+      .level-card-row button {
+        width: 100%;
+      }
+
+      .field input,
+      .field select {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -1083,6 +1291,10 @@
             <input id="profileNicknameInput" type="text" maxlength="20" placeholder="Например, NeonBuilder">
           </div>
           <p class="mini-text" id="profileStatusText">Ник ещё не выбран.</p>
+          <div class="field">
+            <label>Скины куба</label>
+            <div class="skin-grid" id="skinGrid"></div>
+          </div>
           <div class="menu-actions">
             <button id="saveProfileBtn">Сохранить ник</button>
             <button class="ghost" id="backToMenuFromProfile">В меню</button>
@@ -1092,6 +1304,10 @@
           <div class="info-card">
             <h3>Важно</h3>
             <p>Перед сохранением появится предупреждение, что никнейм закрепляется навсегда для этой игры в этом браузере.</p>
+          </div>
+          <div class="info-card">
+            <h3>Выбранный скин</h3>
+            <p id="selectedSkinText">Сейчас выбран базовый скин.</p>
           </div>
         </div>
       </div>
@@ -1506,6 +1722,8 @@
     const userLevelAuthorLabel = document.getElementById('userLevelAuthorLabel');
     const profileNicknameInput = document.getElementById('profileNicknameInput');
     const profileStatusText = document.getElementById('profileStatusText');
+    const skinGrid = document.getElementById('skinGrid');
+    const selectedSkinText = document.getElementById('selectedSkinText');
     const saveProfileBtn = document.getElementById('saveProfileBtn');
 
     const config = {
@@ -1519,6 +1737,19 @@
     const levelsStorageKey = 'geometry-dash-clone-levels-v1';
     const profileStorageKey = 'geometry-dash-clone-profile-v1';
     const userLevelsStorageKey = 'geometry-dash-clone-user-levels-v1';
+    const skinCatalog = [
+      { id: 'starter', name: 'Starter', unlockText: 'Первый вход', unlocked: () => true, colors: ['#ffe067', '#ff8c2a'] },
+      { id: 'emerald', name: 'Emerald', unlockText: 'Пройди 1 уровень', unlocked: (stats) => stats.totalWins >= 1, colors: ['#b6ff6e', '#2ec66b'] },
+      { id: 'sky', name: 'Sky', unlockText: 'Пройди Sky Loop', unlocked: (stats) => stats.officialWins.skyLoop >= 1, colors: ['#9fe7ff', '#2d8fff'] },
+      { id: 'night', name: 'Night', unlockText: 'Пройди Night Drive', unlocked: (stats) => stats.officialWins.nightDrive >= 1, colors: ['#c3b6ff', '#5a47ff'] },
+      { id: 'pulse', name: 'Pulse', unlockText: 'Пройди Pulse Run', unlocked: (stats) => stats.officialWins.pulseRun >= 1, colors: ['#ff9e8c', '#ff4a55'] },
+      { id: 'architect', name: 'Architect', unlockText: 'Сохрани 3 уровня', unlocked: (stats) => stats.savedLevels >= 3, colors: ['#ffd18d', '#d88534'] },
+      { id: 'publisher', name: 'Publisher', unlockText: 'Опубликуй 1 уровень', unlocked: (stats) => stats.publishedLevels >= 1, colors: ['#fff0a0', '#ffbf47'] },
+      { id: 'tester', name: 'Tester', unlockText: 'Протестируй 5 своих уровней', unlocked: (stats) => stats.editorWins >= 5, colors: ['#a9fff3', '#1ab7a2'] },
+      { id: 'survivor', name: 'Survivor', unlockText: 'Погибни 10 раз', unlocked: (stats) => stats.deaths >= 10, colors: ['#ffb7c3', '#c73e63'] },
+      { id: 'gravity', name: 'Gravity', unlockText: 'Используй 10 орбов гравитации', unlocked: (stats) => stats.gravityFlips >= 10, colors: ['#e2f5ff', '#4aa7ff'] },
+      { id: 'bounce', name: 'Bounce', unlockText: 'Используй 10 батутов', unlocked: (stats) => stats.bounces >= 10, colors: ['#d6ff9f', '#63d647'] }
+    ];
 
     const musicLibrary = {
       'pulse-run': {
@@ -1974,22 +2205,120 @@
         const raw = window.localStorage.getItem(profileStorageKey);
         const parsed = raw ? JSON.parse(raw) : null;
         if (!parsed || typeof parsed !== 'object') {
-          return { nickname: '', locked: false };
+          return {
+            nickname: '',
+            locked: false,
+            selectedSkin: 'starter',
+            stats: {
+              totalWins: 0,
+              editorWins: 0,
+              savedLevels: 0,
+              publishedLevels: 0,
+              deaths: 0,
+              gravityFlips: 0,
+              bounces: 0,
+              officialWins: {
+                pulseRun: 0,
+                skyLoop: 0,
+                nightDrive: 0
+              }
+            }
+          };
         }
         return {
           nickname: typeof parsed.nickname === 'string' ? parsed.nickname : '',
-          locked: Boolean(parsed.locked)
+          locked: Boolean(parsed.locked),
+          selectedSkin: typeof parsed.selectedSkin === 'string' ? parsed.selectedSkin : 'starter',
+          stats: {
+            totalWins: parsed.stats?.totalWins ?? 0,
+            editorWins: parsed.stats?.editorWins ?? 0,
+            savedLevels: parsed.stats?.savedLevels ?? 0,
+            publishedLevels: parsed.stats?.publishedLevels ?? 0,
+            deaths: parsed.stats?.deaths ?? 0,
+            gravityFlips: parsed.stats?.gravityFlips ?? 0,
+            bounces: parsed.stats?.bounces ?? 0,
+            officialWins: {
+              pulseRun: parsed.stats?.officialWins?.pulseRun ?? 0,
+              skyLoop: parsed.stats?.officialWins?.skyLoop ?? 0,
+              nightDrive: parsed.stats?.officialWins?.nightDrive ?? 0
+            }
+          }
         };
       } catch {
-        return { nickname: '', locked: false };
+        return {
+          nickname: '',
+          locked: false,
+          selectedSkin: 'starter',
+          stats: {
+            totalWins: 0,
+            editorWins: 0,
+            savedLevels: 0,
+            publishedLevels: 0,
+            deaths: 0,
+            gravityFlips: 0,
+            bounces: 0,
+            officialWins: {
+              pulseRun: 0,
+              skyLoop: 0,
+              nightDrive: 0
+            }
+          }
+        };
       }
     }
 
     function writeProfile(profile) {
       window.localStorage.setItem(profileStorageKey, JSON.stringify({
         nickname: profile.nickname ?? '',
-        locked: Boolean(profile.locked)
+        locked: Boolean(profile.locked),
+        selectedSkin: profile.selectedSkin ?? 'starter',
+        stats: profile.stats ?? {
+          totalWins: 0,
+          editorWins: 0,
+          savedLevels: 0,
+          publishedLevels: 0,
+          deaths: 0,
+          gravityFlips: 0,
+          bounces: 0,
+          officialWins: {
+            pulseRun: 0,
+            skyLoop: 0,
+            nightDrive: 0
+          }
+        }
       }));
+    }
+
+    function currentSkin() {
+      const profile = readProfile();
+      const stats = profile.stats;
+      const preferred = skinCatalog.find((skin) => skin.id === profile.selectedSkin);
+      if (preferred && preferred.unlocked(stats)) {
+        return preferred;
+      }
+      return skinCatalog[0];
+    }
+
+    function skinPalette(skinId) {
+      return {
+        starter: ['#ffe067', '#ff8c2a'],
+        emerald: ['#b6ff6e', '#2ec66b'],
+        sky: ['#9fe7ff', '#2d8fff'],
+        night: ['#c3b6ff', '#5a47ff'],
+        pulse: ['#ff9e8c', '#ff4a55'],
+        architect: ['#ffd18d', '#d88534'],
+        publisher: ['#fff0a0', '#ffbf47'],
+        tester: ['#a9fff3', '#1ab7a2'],
+        survivor: ['#ffb7c3', '#c73e63'],
+        gravity: ['#e2f5ff', '#4aa7ff'],
+        bounce: ['#d6ff9f', '#63d647']
+      }[skinId] ?? ['#ffe067', '#ff8c2a'];
+    }
+
+    function incrementProfileStat(mutator) {
+      const profile = readProfile();
+      mutator(profile.stats);
+      writeProfile(profile);
     }
 
     function refreshProfileUi() {
@@ -2000,6 +2329,28 @@
       profileStatusText.textContent = profile.locked
         ? `Ник закреплён: ${profile.nickname}`
         : 'Ник ещё не выбран.';
+      skinGrid.innerHTML = '';
+      skinCatalog.forEach((skin) => {
+        const unlocked = skin.unlocked(profile.stats);
+        const card = document.createElement('div');
+        card.className = `skin-card${unlocked ? '' : ' locked'}${profile.selectedSkin === skin.id && unlocked ? ' active' : ''}`;
+        card.innerHTML = `
+          <div class="skin-preview" style="background: linear-gradient(135deg, ${skin.colors[0]}, ${skin.colors[1]});"></div>
+          <h4>${skin.name}</h4>
+          <p>${unlocked ? 'Открыто' : `Нужно: ${skin.unlockText}`}</p>
+        `;
+        if (unlocked) {
+          card.addEventListener('click', () => {
+            const nextProfile = readProfile();
+            nextProfile.selectedSkin = skin.id;
+            writeProfile(nextProfile);
+            refreshProfileUi();
+            gameMessage.textContent = `Скин выбран: ${skin.name}`;
+          });
+        }
+        skinGrid.append(card);
+      });
+      selectedSkinText.textContent = `Сейчас выбран скин: ${currentSkin().name}`;
     }
 
     function readUserLevels() {
@@ -3017,6 +3368,9 @@
           gameState.vy = orbFlipVelocity(gameState.gravityDir);
           gameState.grounded = false;
           gameState.rotation = 0;
+          incrementProfileStat((stats) => {
+            stats.gravityFlips += 1;
+          });
           gameMessage.textContent = gameState.gravityDir < 0 ? 'Гравитация на потолок!' : 'Гравитация на пол!';
           return true;
         }
@@ -3143,6 +3497,9 @@
           gameState.vy = jumpVelocityForGravity(gameState.gravityDir) * 1.45;
           gameState.grounded = false;
           gameState.bounceLock = true;
+          incrementProfileStat((stats) => {
+            stats.bounces += 1;
+          });
           gameMessage.textContent = 'Батут!';
         } else if (!touchingBounce) {
           gameState.bounceLock = false;
@@ -3231,6 +3588,20 @@
       gameState.finishAnimation = false;
       gameState.won = true;
       stopMusic();
+      incrementProfileStat((stats) => {
+        stats.totalWins += 1;
+        if (gameMode === 'editor-test') {
+          stats.editorWins += 1;
+        } else if (gameMode === 'menu-level') {
+          if (selectedDemoLevelIndex === 0) {
+            stats.officialWins.pulseRun += 1;
+          } else if (selectedDemoLevelIndex === 1) {
+            stats.officialWins.skyLoop += 1;
+          } else if (selectedDemoLevelIndex === 2) {
+            stats.officialWins.nightDrive += 1;
+          }
+        }
+      });
       if (gameMode === 'editor-test') {
         markEditorLevelVerified();
         finishTitle.textContent = 'Уровень проверен!';
@@ -3262,6 +3633,9 @@
 
     function failRun() {
       gameState.alive = false;
+      incrementProfileStat((stats) => {
+        stats.deaths += 1;
+      });
       gameMessage.textContent = 'Столкновение! Автостарт...';
       stopMusic();
       restartTimer = window.setTimeout(() => {
@@ -3778,18 +4152,77 @@
       const scale = 1 - pull * 0.72;
       gameCtx.scale(scale, scale);
       gameCtx.globalAlpha = 1 - pull * 0.55;
+      const skin = currentSkin();
+      const [colorA, colorB] = skinPalette(skin.id);
       const gradient = gameCtx.createLinearGradient(-10, -10, 10, 10);
-      gradient.addColorStop(0, '#ffe067');
-      gradient.addColorStop(1, '#ff8c2a');
+      gradient.addColorStop(0, colorA);
+      gradient.addColorStop(1, colorB);
       gameCtx.fillStyle = gradient;
       gameCtx.fillRect(-gameState.size / 2, -gameState.size / 2, gameState.size, gameState.size);
       gameCtx.strokeStyle = '#fff';
       gameCtx.strokeRect(-gameState.size / 2 + 1, -gameState.size / 2 + 1, gameState.size - 2, gameState.size - 2);
-      if (gameState.gravityDir < 0) {
-        gameCtx.fillStyle = '#0c3155';
+      gameCtx.fillStyle = '#0c3155';
+      if (skin.id === 'emerald') {
+        gameCtx.fillRect(-6, -6, 4, 12);
+        gameCtx.fillRect(2, -6, 4, 12);
+      } else if (skin.id === 'sky') {
+        gameCtx.beginPath();
+        gameCtx.arc(0, 0, 5, 0, Math.PI * 2);
+        gameCtx.fill();
+      } else if (skin.id === 'night') {
+        gameCtx.fillRect(-7, -7, 14, 4);
+        gameCtx.fillRect(-7, 3, 14, 4);
+      } else if (skin.id === 'pulse') {
+        gameCtx.beginPath();
+        gameCtx.moveTo(-6, 0);
+        gameCtx.lineTo(-2, -5);
+        gameCtx.lineTo(2, 5);
+        gameCtx.lineTo(6, 0);
+        gameCtx.strokeStyle = '#ffffff';
+        gameCtx.lineWidth = 2;
+        gameCtx.stroke();
+        gameCtx.lineWidth = 1;
+      } else if (skin.id === 'architect') {
+        gameCtx.fillRect(-6, -6, 12, 2);
+        gameCtx.fillRect(-6, 4, 12, 2);
+        gameCtx.fillRect(-1, -6, 2, 12);
+      } else if (skin.id === 'publisher') {
+        gameCtx.beginPath();
+        gameCtx.arc(0, 0, 6, 0, Math.PI * 2);
+        gameCtx.strokeStyle = '#fff8d1';
+        gameCtx.lineWidth = 2;
+        gameCtx.stroke();
+        gameCtx.lineWidth = 1;
+      } else if (skin.id === 'tester') {
+        gameCtx.fillRect(-6, -6, 12, 12);
+        gameCtx.clearRect(-3, -3, 6, 6);
+      } else if (skin.id === 'survivor') {
+        gameCtx.fillRect(-7, -1, 14, 2);
+        gameCtx.fillRect(-1, -7, 2, 14);
+      } else if (skin.id === 'gravity') {
+        gameCtx.beginPath();
+        gameCtx.arc(0, 0, 6, Math.PI * 0.2, Math.PI * 1.7);
+        gameCtx.strokeStyle = '#ffffff';
+        gameCtx.lineWidth = 2;
+        gameCtx.stroke();
+        gameCtx.beginPath();
+        gameCtx.moveTo(1, -6);
+        gameCtx.lineTo(5, -2);
+        gameCtx.lineTo(0, -2);
+        gameCtx.closePath();
+        gameCtx.fillStyle = '#ffffff';
+        gameCtx.fill();
+        gameCtx.lineWidth = 1;
+      } else if (skin.id === 'bounce') {
+        gameCtx.beginPath();
+        gameCtx.arc(0, 1, 5, 0, Math.PI, true);
+        gameCtx.strokeStyle = '#ffffff';
+        gameCtx.lineWidth = 2;
+        gameCtx.stroke();
+        gameCtx.lineWidth = 1;
+      } else if (gameState.gravityDir < 0) {
         gameCtx.fillRect(-6, -7, 12, 3);
       } else {
-        gameCtx.fillStyle = '#0c3155';
         gameCtx.fillRect(-6, 4, 12, 3);
       }
       gameCtx.restore();
@@ -4313,6 +4746,9 @@
       const saved = readSavedLevels();
       saved[name] = cloneLevel(editorLevel);
       writeSavedLevels(saved);
+      incrementProfileStat((stats) => {
+        stats.savedLevels += 1;
+      });
       refreshSavedLevelsSelect(name);
       gameMessage.textContent = `Уровень успешно сохранён: ${name}`;
     }
@@ -4373,7 +4809,7 @@
       if (!confirmed) {
         return;
       }
-      writeProfile({ nickname, locked: true });
+      writeProfile({ ...profile, nickname, locked: true });
       refreshProfileUi();
       gameMessage.textContent = `Ник сохранён: ${nickname}`;
     }
@@ -4409,6 +4845,9 @@
         level: cloneLevel(level)
       };
       writeUserLevels(userLevels);
+      incrementProfileStat((stats) => {
+        stats.publishedLevels += 1;
+      });
       selectedUserLevelName = name;
       refreshUserLevelsSelect(name);
       gameMessage.textContent = `Уровень успешно опубликован: ${name}`;
