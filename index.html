@@ -1021,7 +1021,7 @@
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 640px), (max-height: 640px) and (orientation: landscape) {
       html,
       body,
       .app {
@@ -2539,7 +2539,9 @@
       if (!editorMobileScale || !editorPanel) {
         return;
       }
-      if (window.innerWidth > 640) {
+      const compactLandscape = window.matchMedia('(max-height: 640px) and (orientation: landscape)').matches;
+      const compactPortrait = window.innerWidth <= 640;
+      if (!compactLandscape && !compactPortrait) {
         editorMobileScale.style.height = '';
         editorPanel.style.transform = '';
         editorPanel.style.transformOrigin = '';
