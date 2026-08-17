@@ -1756,6 +1756,7 @@
     ];
     let remoteUserLevels = {};
     let userLevelsLoading = false;
+    let legacyPublishMigrationPromise = null;
 
     const musicLibrary = {
       'pulse-run': {
@@ -2377,6 +2378,23 @@
       return { ...readLocalUserLevels(), ...remoteUserLevels };
     }
 
+    async function postLevelsToSupabase(levels) {
+      const response = await fetch(`${supabaseConfig.url}/rest/v1/levels`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: supabaseConfig.publishableKey,
+          Authorization: `Bearer ${supabaseConfig.publishableKey}`,
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify(levels)
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.json();
+    }
+
     function formatPublishedDate(value) {
       if (!value) {
         return 'Без даты';
@@ -2386,6 +2404,44 @@
         return 'Без даты';
       }
       return date.toLocaleDateString('ru-RU');
+    }
+
+    async function migrateLegacyPublishedLevels() {
+      if (legacyPublishMigrationPromise) {
+        return legacyPublishMigrationPromise;
+      }
+      legacyPublishMigrationPromise = (async () => {
+        const localLevels = readLocalUserLevels();
+        const entries = Object.entries(localLevels).filter(([name, record]) => {
+          return name && record?.level && !remoteUserLevels[name];
+        });
+        if (!entries.length) {
+          return 0;
+        }
+        const createdRows = await postLevelsToSupabase(entries.map(([name, record]) => ({
+          name,
+          author: record.author || 'Неизвестный автор',
+          level_data: cloneLevel(record.level)
+        })));
+        createdRows.forEach((row) => {
+          if (!row?.name || !row?.level_data) {
+            return;
+          }
+          remoteUserLevels[row.name] = {
+            id: row.id,
+            name: row.name,
+            author: row.author || 'Неизвестный автор',
+            publishedAt: formatPublishedDate(row.created_at),
+            level: cloneLevel(row.level_data)
+          };
+        });
+        return createdRows.length;
+      })();
+      try {
+        return await legacyPublishMigrationPromise;
+      } finally {
+        legacyPublishMigrationPromise = null;
+      }
     }
 
     async function loadRemoteUserLevels() {
@@ -2418,6 +2474,10 @@
           };
         });
         remoteUserLevels = mapped;
+        const migratedCount = await migrateLegacyPublishedLevels();
+        if (migratedCount > 0) {
+          console.info(`Migrated ${migratedCount} legacy published levels to Supabase`);
+        }
       } catch (error) {
         console.warn('Failed to load published levels from Supabase', error);
       } finally {
@@ -4917,24 +4977,11 @@
         level: cloneLevel(level)
       };
       try {
-        const response = await fetch(`${supabaseConfig.url}/rest/v1/levels`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            apikey: supabaseConfig.publishableKey,
-            Authorization: `Bearer ${supabaseConfig.publishableKey}`,
-            Prefer: 'return=representation'
-          },
-          body: JSON.stringify([{
-            name,
-            author: profile.nickname,
-            level_data: cloneLevel(level)
-          }])
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-        const [created] = await response.json();
+        const [created] = await postLevelsToSupabase([{
+          name,
+          author: profile.nickname,
+          level_data: cloneLevel(level)
+        }]);
         remoteUserLevels[name] = {
           id: created?.id || '',
           name,
