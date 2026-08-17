@@ -1107,22 +1107,6 @@
         gap: 12px;
       }
 
-      .editor-panel {
-        padding: 10px;
-      }
-
-      [data-screen="editor"] .status-row {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      [data-screen="editor"] .toolbar-actions {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      [data-screen="editor"] .toolbar-actions button:last-child {
-        grid-column: 1 / -1;
-      }
-
       .editor-viewport {
         order: 1;
       }
@@ -1223,6 +1207,105 @@
       [data-screen="editor"] .field select {
         padding: 10px 12px;
         font-size: 15px;
+      }
+
+      [data-screen="editor"] {
+        overflow: auto;
+      }
+
+      [data-screen="editor"] .editor-panel {
+        width: 680px;
+        max-width: none;
+        padding: 16px;
+        border-radius: 20px;
+        zoom: 0.5;
+      }
+
+      [data-screen="editor"] .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      [data-screen="editor"] .status-row,
+      [data-screen="editor"] .toolbar-actions {
+        display: flex;
+        width: auto;
+        gap: 12px;
+      }
+
+      [data-screen="editor"] .status-row .badge,
+      [data-screen="editor"] .toolbar-actions button {
+        width: auto;
+      }
+
+      [data-screen="editor"] .editor-layout {
+        grid-template-columns: minmax(0, 1fr) 220px;
+        gap: 14px;
+      }
+
+      [data-screen="editor"] .editor-viewport,
+      [data-screen="editor"] .side-panel {
+        order: initial;
+      }
+
+      [data-screen="editor"] .side-panel {
+        padding: 14px;
+        border-radius: 18px;
+        max-height: none;
+        overflow: auto;
+      }
+
+      [data-screen="editor"] .tool-section-nav {
+        gap: 8px;
+      }
+
+      [data-screen="editor"] .tool-section-btn {
+        min-height: 50px;
+        padding: 8px;
+      }
+
+      [data-screen="editor"] .tool-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      [data-screen="editor"] .tool {
+        min-height: 62px;
+        padding: 8px;
+      }
+
+      [data-screen="editor"] .tool-icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      [data-screen="editor"] .tool-page-label {
+        font-size: 13px;
+      }
+
+      [data-screen="editor"] .tool-page-arrow {
+        min-width: 40px;
+        min-height: 40px;
+      }
+
+      [data-screen="editor"] .range-wrap {
+        padding: 10px 12px;
+      }
+
+      [data-screen="editor"] .zoom-btn {
+        min-width: 36px;
+        min-height: 36px;
+        padding: 0;
+      }
+
+      [data-screen="editor"] .editor-actions {
+        display: block;
+      }
+
+      [data-screen="editor"] .editor-actions button {
+        width: 100%;
       }
 
       .level-list {
