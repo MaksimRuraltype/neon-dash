@@ -1046,6 +1046,10 @@
         overflow: auto;
       }
 
+      [data-screen="menu"] .card-grid {
+        display: none;
+      }
+
       .title {
         font-size: clamp(30px, 12vw, 46px);
         line-height: 0.96;
@@ -1103,15 +1107,32 @@
         gap: 12px;
       }
 
+      .editor-panel {
+        padding: 10px;
+      }
+
+      [data-screen="editor"] .status-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      [data-screen="editor"] .toolbar-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      [data-screen="editor"] .toolbar-actions button:last-child {
+        grid-column: 1 / -1;
+      }
+
       .editor-viewport {
         order: 1;
       }
 
       .side-panel {
         order: 2;
-        padding: 12px;
+        padding: 10px;
         border-radius: 16px;
-        max-height: none;
+        max-height: 52vh;
+        overflow: auto;
       }
 
       .tool-section-nav {
@@ -1120,10 +1141,12 @@
       }
 
       .tool-section-btn {
-        min-height: 48px;
+        min-height: 42px;
+        padding: 6px;
       }
 
       .tool-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 8px;
       }
 
@@ -1132,8 +1155,74 @@
       }
 
       .tool-page-label {
-        font-size: 13px;
+        font-size: 12px;
         text-align: center;
+      }
+
+      .tool-page-arrow {
+        min-width: 40px;
+        min-height: 38px;
+      }
+
+      .tool {
+        min-height: 58px;
+        padding: 8px;
+      }
+
+      .tool-icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      .range-wrap {
+        padding: 10px 12px;
+        border-radius: 14px;
+      }
+
+      .zoom-row,
+      .range-top {
+        font-size: 13px;
+      }
+
+      #editorZoomLabel,
+      #editorScrollLabel {
+        font-size: 12px;
+      }
+
+      .zoom-controls {
+        gap: 8px;
+      }
+
+      .zoom-btn {
+        min-width: 38px;
+        min-height: 38px;
+        padding: 0;
+      }
+
+      [data-screen="editor"] .editor-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      [data-screen="editor"] .editor-actions button {
+        width: 100%;
+      }
+
+      [data-screen="editor"] .field label,
+      [data-screen="editor"] .side-panel h3 {
+        font-size: 13px;
+      }
+
+      [data-screen="editor"] .field {
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      [data-screen="editor"] .field input,
+      [data-screen="editor"] .field select {
+        padding: 10px 12px;
+        font-size: 15px;
       }
 
       .level-list {
@@ -2503,13 +2592,15 @@
       }
     }
 
-    async function loadRemoteUserLevels() {
+    async function loadRemoteUserLevels(forceRefresh = false) {
       if (userLevelsLoading) {
         return;
       }
       userLevelsLoading = true;
       try {
-        const response = await fetch(`${supabaseConfig.url}/rest/v1/levels?select=id,name,author,level_data,created_at&order=created_at.desc`, {
+        const cacheBust = forceRefresh ? `&t=${Date.now()}` : '';
+        const response = await fetch(`${supabaseConfig.url}/rest/v1/levels?select=id,name,author,level_data,created_at&order=created_at.desc${cacheBust}`, {
+          cache: 'no-store',
           headers: {
             apikey: supabaseConfig.publishableKey,
             Authorization: `Bearer ${supabaseConfig.publishableKey}`
@@ -3046,7 +3137,7 @@
       } else if (name === 'saved') {
         refreshSavedLevelsSelect();
       } else if (name === 'userLevels') {
-        loadRemoteUserLevels();
+        loadRemoteUserLevels(true);
         refreshUserLevelsSelect(selectedUserLevelName);
       } else if (name === 'profile') {
         refreshProfileUi();
