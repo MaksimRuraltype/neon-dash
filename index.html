@@ -1021,7 +1021,7 @@
       }
     }
 
-    @media (max-width: 640px), (max-height: 640px) and (orientation: landscape) {
+    @media (max-width: 640px), (orientation: landscape) and (hover: none) and (pointer: coarse) {
       html,
       body,
       .app {
@@ -2539,7 +2539,7 @@
       if (!editorMobileScale || !editorPanel) {
         return;
       }
-      const compactLandscape = window.matchMedia('(max-height: 640px) and (orientation: landscape)').matches;
+      const compactLandscape = window.matchMedia('(orientation: landscape) and (hover: none) and (pointer: coarse)').matches;
       const compactPortrait = window.innerWidth <= 640;
       if (!compactLandscape && !compactPortrait) {
         editorMobileScale.style.height = '';
