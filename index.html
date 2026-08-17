@@ -1737,6 +1737,10 @@
     const levelsStorageKey = 'geometry-dash-clone-levels-v1';
     const profileStorageKey = 'geometry-dash-clone-profile-v1';
     const userLevelsStorageKey = 'geometry-dash-clone-user-levels-v1';
+    const supabaseConfig = {
+      url: 'https://gzjyrihmvjbgcukyhtqi.supabase.co',
+      publishableKey: 'sb_publishable_pfHZj4_x-fxxWo8VeUb_bA_gwxC0KHH'
+    };
     const skinCatalog = [
       { id: 'starter', name: 'Starter', unlockText: 'Первый вход', unlocked: () => true, colors: ['#ffe067', '#ff8c2a'] },
       { id: 'emerald', name: 'Emerald', unlockText: 'Пройди 1 уровень', unlocked: (stats) => stats.totalWins >= 1, colors: ['#b6ff6e', '#2ec66b'] },
@@ -1750,6 +1754,8 @@
       { id: 'gravity', name: 'Gravity', unlockText: 'Используй 10 орбов гравитации', unlocked: (stats) => stats.gravityFlips >= 10, colors: ['#e2f5ff', '#4aa7ff'] },
       { id: 'bounce', name: 'Bounce', unlockText: 'Используй 10 батутов', unlocked: (stats) => stats.bounces >= 10, colors: ['#d6ff9f', '#63d647'] }
     ];
+    let remoteUserLevels = {};
+    let userLevelsLoading = false;
 
     const musicLibrary = {
       'pulse-run': {
@@ -2353,7 +2359,7 @@
       selectedSkinText.textContent = `Сейчас выбран скин: ${currentSkin().name}`;
     }
 
-    function readUserLevels() {
+    function readLocalUserLevels() {
       try {
         const raw = window.localStorage.getItem(userLevelsStorageKey);
         const parsed = raw ? JSON.parse(raw) : {};
@@ -2365,6 +2371,61 @@
 
     function writeUserLevels(levels) {
       window.localStorage.setItem(userLevelsStorageKey, JSON.stringify(levels));
+    }
+
+    function readUserLevels() {
+      return { ...readLocalUserLevels(), ...remoteUserLevels };
+    }
+
+    function formatPublishedDate(value) {
+      if (!value) {
+        return 'Без даты';
+      }
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return 'Без даты';
+      }
+      return date.toLocaleDateString('ru-RU');
+    }
+
+    async function loadRemoteUserLevels() {
+      if (userLevelsLoading) {
+        return;
+      }
+      userLevelsLoading = true;
+      try {
+        const response = await fetch(`${supabaseConfig.url}/rest/v1/levels?select=id,name,author,level_data,created_at&order=created_at.desc`, {
+          headers: {
+            apikey: supabaseConfig.publishableKey,
+            Authorization: `Bearer ${supabaseConfig.publishableKey}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const rows = await response.json();
+        const mapped = {};
+        rows.forEach((row) => {
+          if (!row?.name || !row?.level_data) {
+            return;
+          }
+          mapped[row.name] = {
+            id: row.id,
+            name: row.name,
+            author: row.author || 'Неизвестный автор',
+            publishedAt: formatPublishedDate(row.created_at),
+            level: cloneLevel(row.level_data)
+          };
+        });
+        remoteUserLevels = mapped;
+      } catch (error) {
+        console.warn('Failed to load published levels from Supabase', error);
+      } finally {
+        userLevelsLoading = false;
+        if (screens.userLevels.classList.contains('active')) {
+          refreshUserLevelsSelect(selectedUserLevelName);
+        }
+      }
     }
 
     function filteredUserLevelNames() {
@@ -2401,6 +2462,15 @@
       const saved = readUserLevels();
       const names = filteredUserLevelNames();
       userLevelsList.innerHTML = '';
+      if (userLevelsLoading && !names.length) {
+        const loadingCard = document.createElement('div');
+        loadingCard.className = 'info-card';
+        loadingCard.innerHTML = '<h3>Загрузка уровней</h3><p>Подожди чуть-чуть, список обновляется из сети.</p>';
+        userLevelsList.append(loadingCard);
+        userLevelAuthorLabel.textContent = 'Автор: загрузка...';
+        selectedUserLevelName = '';
+        return;
+      }
       if (!names.length) {
         const emptyCard = document.createElement('div');
         emptyCard.className = 'info-card';
@@ -2857,6 +2927,7 @@
       } else if (name === 'saved') {
         refreshSavedLevelsSelect();
       } else if (name === 'userLevels') {
+        loadRemoteUserLevels();
         refreshUserLevelsSelect(selectedUserLevelName);
       } else if (name === 'profile') {
         refreshProfileUi();
@@ -4814,7 +4885,7 @@
       gameMessage.textContent = `Ник сохранён: ${nickname}`;
     }
 
-    function publishSelectedLevel() {
+    async function publishSelectedLevel() {
       const name = savedLevelsSelect.value;
       if (!name) {
         gameMessage.textContent = 'Сначала выбери сохранённый уровень';
@@ -4837,13 +4908,46 @@
         gameMessage.textContent = 'Уровень не проверен: сначала пройди эту версию и ничего не меняй после прохождения';
         return;
       }
-      const userLevels = readUserLevels();
-      userLevels[name] = {
+      const publishedAt = formatPublishedDate(new Date().toISOString());
+      const userLevels = readLocalUserLevels();
+      const record = {
         name,
         author: profile.nickname,
-        publishedAt: '2026-08-16',
+        publishedAt,
         level: cloneLevel(level)
       };
+      try {
+        const response = await fetch(`${supabaseConfig.url}/rest/v1/levels`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: supabaseConfig.publishableKey,
+            Authorization: `Bearer ${supabaseConfig.publishableKey}`,
+            Prefer: 'return=representation'
+          },
+          body: JSON.stringify([{
+            name,
+            author: profile.nickname,
+            level_data: cloneLevel(level)
+          }])
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const [created] = await response.json();
+        remoteUserLevels[name] = {
+          id: created?.id || '',
+          name,
+          author: profile.nickname,
+          publishedAt: formatPublishedDate(created?.created_at),
+          level: cloneLevel(level)
+        };
+      } catch (error) {
+        console.warn('Failed to publish level to Supabase', error);
+        gameMessage.textContent = 'Не удалось опубликовать уровень в сеть. Проверь интернет и попробуй ещё раз';
+        return;
+      }
+      userLevels[name] = record;
       writeUserLevels(userLevels);
       incrementProfileStat((stats) => {
         stats.publishedLevels += 1;
@@ -5162,6 +5266,7 @@
     applyEditorLevelMeta();
     refreshSavedLevelsSelect();
     refreshUserLevelsSelect();
+    loadRemoteUserLevels();
     refreshProfileUi();
     syncEditorScroll();
     drawEditor();
