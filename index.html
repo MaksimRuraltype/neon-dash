@@ -427,6 +427,10 @@
       min-height: 0;
     }
 
+    .editor-mobile-scale {
+      width: 100%;
+    }
+
     .side-panel {
       padding: 18px;
       border-radius: 22px;
@@ -1213,12 +1217,17 @@
         overflow: auto;
       }
 
+      [data-screen="editor"] .editor-mobile-scale {
+        width: 100%;
+        min-width: 0;
+      }
+
       [data-screen="editor"] .editor-panel {
-        width: 680px;
+        width: 980px;
         max-width: none;
-        padding: 16px;
-        border-radius: 20px;
-        zoom: 0.5;
+        padding: 20px;
+        border-radius: 28px;
+        gap: 16px;
       }
 
       [data-screen="editor"] .topbar {
@@ -1241,8 +1250,8 @@
       }
 
       [data-screen="editor"] .editor-layout {
-        grid-template-columns: minmax(0, 1fr) 220px;
-        gap: 14px;
+        grid-template-columns: 1fr 290px;
+        gap: 16px;
       }
 
       [data-screen="editor"] .editor-viewport,
@@ -1251,8 +1260,8 @@
       }
 
       [data-screen="editor"] .side-panel {
-        padding: 14px;
-        border-radius: 18px;
+        padding: 18px;
+        border-radius: 22px;
         max-height: none;
         overflow: auto;
       }
@@ -1262,42 +1271,42 @@
       }
 
       [data-screen="editor"] .tool-section-btn {
-        min-height: 50px;
+        min-height: 58px;
         padding: 8px;
       }
 
       [data-screen="editor"] .tool-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 8px;
+        gap: 10px;
       }
 
       [data-screen="editor"] .tool {
-        min-height: 62px;
-        padding: 8px;
+        min-height: 72px;
+        padding: 10px;
       }
 
       [data-screen="editor"] .tool-icon {
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
       }
 
       [data-screen="editor"] .tool-page-label {
-        font-size: 13px;
+        font-size: 14px;
       }
 
       [data-screen="editor"] .tool-page-arrow {
-        min-width: 40px;
-        min-height: 40px;
+        min-width: 44px;
+        min-height: 42px;
       }
 
       [data-screen="editor"] .range-wrap {
-        padding: 10px 12px;
+        padding: 12px 14px;
       }
 
       [data-screen="editor"] .zoom-btn {
-        min-width: 36px;
+        min-width: 42px;
         min-height: 36px;
-        padding: 0;
+        padding: 0 10px;
       }
 
       [data-screen="editor"] .editor-actions {
@@ -1306,11 +1315,6 @@
 
       [data-screen="editor"] .editor-actions button {
         width: 100%;
-      }
-
-      .level-list {
-        max-height: 320px;
-        min-height: 220px;
       }
 
       .level-card-row {
@@ -1554,7 +1558,8 @@
     </section>
 
     <section class="screen editor-screen" data-screen="editor">
-      <div class="editor-panel">
+      <div class="editor-mobile-scale" id="editorMobileScale">
+      <div class="editor-panel" id="editorPanel">
         <div class="topbar">
           <div class="status-row">
             <div class="badge">Редактор уровня</div>
@@ -1691,6 +1696,7 @@
             </div>
           </aside>
         </div>
+      </div>
       </div>
     </section>
   </div>
@@ -1861,6 +1867,8 @@
 
     const gameCanvas = document.getElementById('gameCanvas');
     const editorCanvas = document.getElementById('editorCanvas');
+    const editorMobileScale = document.getElementById('editorMobileScale');
+    const editorPanel = document.getElementById('editorPanel');
     const gameCtx = gameCanvas.getContext('2d');
     const editorCtx = editorCanvas.getContext('2d');
     const progressLabel = document.getElementById('progressLabel');
@@ -2525,6 +2533,27 @@
       if (options.toast || !screens.game.classList.contains('active')) {
         showToast(message);
       }
+    }
+
+    function syncEditorMobileScale() {
+      if (!editorMobileScale || !editorPanel) {
+        return;
+      }
+      if (window.innerWidth > 640) {
+        editorMobileScale.style.height = '';
+        editorPanel.style.transform = '';
+        editorPanel.style.transformOrigin = '';
+        editorPanel.style.width = '';
+        return;
+      }
+      const horizontalPadding = 16;
+      const baseWidth = 980;
+      const availableWidth = Math.max(window.innerWidth - horizontalPadding, 320);
+      const scale = Math.min(availableWidth / baseWidth, 1);
+      editorPanel.style.width = `${baseWidth}px`;
+      editorPanel.style.transformOrigin = 'top left';
+      editorPanel.style.transform = `scale(${scale})`;
+      editorMobileScale.style.height = `${editorPanel.offsetHeight * scale}px`;
     }
 
     function currentSkin() {
@@ -3215,6 +3244,7 @@
 
       if (name === 'editor') {
         applyEditorLevelMeta();
+        syncEditorMobileScale();
         syncEditorScroll();
         drawEditor();
       } else if (name === 'saved') {
@@ -5541,11 +5571,13 @@
         jump();
       }
     });
+    window.addEventListener('resize', syncEditorMobileScale);
 
     setTool(selectedTool);
     syncGroupModeButton();
     syncMoveModeUi();
     applyEditorLevelMeta();
+    syncEditorMobileScale();
     refreshSavedLevelsSelect();
     refreshUserLevelsSelect();
     loadRemoteUserLevels();
