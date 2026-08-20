@@ -129,11 +129,21 @@
       border-radius: 14px;
       padding: 14px 18px;
       font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.01em;
       color: #03141d;
-      background: linear-gradient(135deg, var(--accent), #ffe58e);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 45%),
+        linear-gradient(135deg, var(--accent), #ffe58e 58%, #ffad33);
+      border: 1px solid rgba(255, 247, 214, 0.4);
       cursor: pointer;
-      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
-      box-shadow: 0 12px 24px rgba(255, 191, 71, 0.22);
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease, border-color 120ms ease;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -2px 0 rgba(99, 45, 0, 0.2),
+        0 12px 24px rgba(255, 191, 71, 0.22);
+      position: relative;
+      overflow: hidden;
     }
 
     button:hover,
@@ -142,23 +152,316 @@
       filter: brightness(1.04);
     }
 
+    button::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 46%, rgba(255, 255, 255, 0.08));
+      pointer-events: none;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow:
+        inset 0 2px 0 rgba(0, 0, 0, 0.12),
+        0 6px 14px rgba(255, 191, 71, 0.18);
+    }
+
     button.secondary {
       color: var(--text);
-      background: linear-gradient(135deg, #0a607f, #21a8d8);
-      box-shadow: 0 12px 24px rgba(33, 168, 216, 0.22);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 48%),
+        linear-gradient(135deg, #0a607f, #21a8d8 58%, #58d5ff);
+      border: 1px solid rgba(146, 233, 255, 0.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.24),
+        inset 0 -2px 0 rgba(0, 34, 53, 0.2),
+        0 12px 24px rgba(33, 168, 216, 0.22);
     }
 
     button.ghost {
       color: var(--text);
-      background: rgba(255, 255, 255, 0.06);
-      box-shadow: none;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 50%),
+        rgba(255, 255, 255, 0.06);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        0 10px 22px rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .menu-actions button,
+    .toolbar-actions button,
+    .modal-actions button,
+    .editor-actions button {
+      min-height: 52px;
+      border-radius: 18px;
+    }
+
+    .layer-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .layer-switch .mini-text {
+      min-width: 92px;
+      margin: 0;
+    }
+
+    .layer-switch button {
+      min-width: 0;
+      flex: 1 1 0;
+      padding: 10px 12px;
+    }
+
+    .layer-switch button.active {
+      color: #09131f;
+      background: linear-gradient(135deg, rgba(255, 224, 103, 0.98), rgba(255, 191, 71, 0.96));
+      box-shadow: 0 10px 24px rgba(255, 191, 71, 0.28);
+      border-color: rgba(255, 224, 103, 0.72);
+    }
+
+    .menu-actions button:first-child,
+    .toolbar-actions button:first-child {
+      clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 4% 50%);
+      padding-left: 22px;
+      padding-right: 22px;
     }
 
     .card-grid {
       display: grid;
       gap: 14px;
       align-content: start;
+    }
+
+    .hero-menu {
+      position: relative;
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+      text-align: center;
+      width: min(920px, 100%);
+      margin: 0 auto;
+      padding: 72px 12px 8px;
+    }
+
+    [data-screen="menu"] .menu-panel {
+      grid-template-columns: 1fr;
+      place-items: center;
+      padding: 28px 32px;
+      min-height: auto;
+      align-content: start;
+      overflow: hidden;
+    }
+
+    [data-screen="menu"] .menu-actions {
+      width: auto;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    [data-screen="tutorial"] .menu-panel {
+      grid-template-columns: 280px 1fr;
+      align-items: start;
+    }
+
+    [data-screen="tutorial"] .title {
+      font-size: clamp(34px, 4.6vw, 60px);
+      line-height: 0.96;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+
+    .hero-menu .title {
+      position: relative;
+      z-index: 2;
+      margin: 0 auto 10px;
+      width: fit-content;
+      pointer-events: none;
+    }
+
+    .profile-corner {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      z-index: 6;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tutorial-corner {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 6;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 16px;
+    }
+
+    .menu-tile-wrap {
+      display: grid;
+      grid-template-columns: minmax(150px, 190px) minmax(210px, 270px) minmax(150px, 190px);
+      gap: 16px;
+      align-items: stretch;
+      justify-content: center;
+      margin: 4px auto 0;
+      width: min(700px, 100%);
+    }
+
+    .menu-tile {
+      min-height: 168px;
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.36), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06)),
+        rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow);
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      transition: transform 140ms ease, border-color 140ms ease, filter 140ms ease;
+    }
+
+    .menu-tile.primary {
+      min-height: 208px;
+      background:
+        radial-gradient(circle at top, rgba(255, 241, 199, 0.52), transparent 40%),
+        linear-gradient(180deg, rgba(255, 214, 112, 0.36), rgba(255, 171, 52, 0.18)),
+        rgba(255, 255, 255, 0.12);
+    }
+
+    .menu-tile h3,
+    .menu-tile p {
+      margin: 0;
+    }
+
+    .menu-tile h3,
+    .menu-tile p {
+      display: none;
+    }
+
+    .menu-tile-btn {
+      width: 100%;
+      min-height: 100%;
+      padding: 0;
+      border-radius: 28px;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .menu-tile-btn::before {
+      display: none;
+    }
+
+    .menu-tile-btn:hover .menu-tile {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.28);
+      filter: brightness(1.03);
+    }
+
+    .menu-tile-btn:active {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .menu-tile-btn:active .menu-tile {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .menu-tile-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      position: relative;
+      display: block;
+      background: rgba(255, 255, 255, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      margin: 0;
+    }
+
+    .menu-tile.primary .menu-tile-icon {
+      background: rgba(255, 255, 255, 0.28);
+      border-color: rgba(3, 20, 29, 0.16);
+    }
+
+    .menu-tile-icon.play::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 16px;
+      width: 20px;
+      height: 26px;
+      background: linear-gradient(135deg, #04131d, #177aa1);
+      clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+    }
+
+    .menu-tile-icon.tools::before,
+    .menu-tile-icon.tools::after {
+      content: "";
+      position: absolute;
+      background: linear-gradient(135deg, #d9fff6, #50d7ff);
+    }
+
+    .menu-tile-icon.tools::before {
+      left: 15px;
+      top: 26px;
+      width: 31px;
+      height: 7px;
+      border-radius: 999px;
+      transform: rotate(45deg);
+      box-shadow: 0 0 0 2px rgba(10, 62, 79, 0.18);
+    }
+
+    .menu-tile-icon.tools::after {
+      left: 27px;
+      top: 14px;
+      width: 7px;
+      height: 31px;
+      border-radius: 6px;
+      transform: rotate(45deg);
+      box-shadow: 0 0 0 2px rgba(10, 62, 79, 0.18);
+    }
+
+    .menu-tile-icon.files::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      top: 10px;
+      width: 28px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #fff1bf, #ffbf47);
+      box-shadow: inset 0 0 0 2px rgba(3, 20, 29, 0.12);
+    }
+
+    .menu-tile-icon.files::after {
+      content: "";
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      width: 10px;
+      height: 10px;
+      background: rgba(3, 20, 29, 0.14);
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
     }
 
     .info-card {
@@ -182,6 +485,388 @@
     .hud-note {
       color: var(--muted);
       line-height: 1.45;
+    }
+
+    .tutorial-shell {
+      display: grid;
+      gap: 18px;
+      min-height: 100%;
+    }
+
+    .tutorial-page {
+      display: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      align-content: start;
+    }
+
+    .tutorial-page.active {
+      display: grid;
+    }
+
+    .tutorial-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: grid;
+      gap: 14px;
+    }
+
+    .tutorial-card h3,
+    .tutorial-card p {
+      margin: 0;
+    }
+
+    .tutorial-card p {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .tutorial-card.wide {
+      grid-column: span 3;
+      grid-template-columns: 1.05fr 1fr;
+      align-items: center;
+    }
+
+    .tutorial-card.wide .tutorial-visual {
+      height: 180px;
+    }
+
+    .tutorial-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tutorial-progress {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .tutorial-dots {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tutorial-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+    }
+
+    .tutorial-dot.active {
+      background: linear-gradient(135deg, #ffe58e, #ffbf47);
+      box-shadow: 0 0 16px rgba(255, 191, 71, 0.3);
+      transform: scale(1.15);
+    }
+
+    .tutorial-nav-actions {
+      display: inline-flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tutorial-tip-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .tutorial-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .tutorial-tip-number {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #06141f;
+      background: linear-gradient(135deg, #ffe58e, #ffbf47);
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(255, 191, 71, 0.24);
+    }
+
+    .tutorial-tip span:last-child {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .tutorial-visual {
+      position: relative;
+      height: 120px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(87, 239, 255, 0.16), transparent 38%),
+        linear-gradient(180deg, rgba(20, 90, 128, 0.95), rgba(6, 25, 39, 0.98) 68%),
+        linear-gradient(180deg, rgba(14, 182, 204, 0.12), rgba(14, 182, 204, 0) 42%);
+      box-shadow:
+        inset 0 -18px 0 rgba(7, 58, 72, 0.98),
+        inset 0 -24px 0 rgba(18, 182, 201, 0.96),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    .tutorial-scene {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .tutorial-dom-shot {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top, rgba(57, 243, 210, 0.16), transparent 36%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2));
+    }
+
+    .tutorial-shot-scale {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform-origin: top left;
+      pointer-events: none;
+    }
+
+    .tutorial-shot-screen {
+      position: relative;
+      inset: auto;
+      display: flex;
+      padding: 18px;
+      overflow: hidden;
+      min-height: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .tutorial-shot-screen .menu-panel,
+    .tutorial-shot-screen .editor-panel,
+    .tutorial-shot-screen .game-panel {
+      max-height: none;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .tutorial-shot-screen .modal-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      padding: 16px;
+      border-radius: 24px;
+      background: rgba(1, 8, 14, 0.72);
+    }
+
+    .tutorial-shot-screen button,
+    .tutorial-shot-screen input,
+    .tutorial-shot-screen select,
+    .tutorial-shot-screen textarea {
+      pointer-events: none;
+    }
+
+    .tutorial-shot-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .tutorial-visual::before,
+    .tutorial-visual::after {
+      content: "";
+      position: absolute;
+    }
+
+    .tutorial-visual.use-canvas::before,
+    .tutorial-visual.use-canvas::after {
+      display: none;
+    }
+
+    .tutorial-visual::before {
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
+    }
+
+    .tutorial-visual.jump::before {
+      left: 18px;
+      bottom: 25px;
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #ffe067, #ff8c2a);
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+        70px 0 0 -2px rgba(255, 255, 255, 0),
+        66px 0 0 0 #ff6f7a;
+    }
+
+    .tutorial-visual.jump::after {
+      left: 16px;
+      top: 12px;
+      width: 78px;
+      height: 52px;
+      border: 3px solid rgba(255,255,255,0.74);
+      border-color: rgba(255,255,255,0.74) transparent transparent transparent;
+      border-radius: 50%;
+      transform: rotate(8deg);
+    }
+
+    .tutorial-visual.editor::before {
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(rgba(57, 243, 210, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 243, 210, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-position: 0 0, 0 0, 12px 12px, 12px 12px;
+    }
+
+    .tutorial-visual.editor::after {
+      left: 28px;
+      top: 30px;
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #ff9966, #f04b43);
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.28),
+        28px 0 0 0 #43d16a,
+        28px 0 0 2px rgba(255,255,255,0.22),
+        56px 0 0 0 #44d0e7,
+        56px 0 0 2px rgba(255,255,255,0.22),
+        84px 0 0 0 #ffd78d,
+        84px 0 0 2px rgba(255,255,255,0.22);
+    }
+
+    .tutorial-visual.publish::before {
+      left: 18px;
+      bottom: 25px;
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #ffe067, #ff8c2a);
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.28),
+        56px -2px 0 0 #12b6c9,
+        56px -2px 0 2px rgba(255,255,255,0.16),
+        106px -10px 0 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .tutorial-visual.publish::after {
+      right: 26px;
+      top: 18px;
+      width: 18px;
+      height: 78px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.04)),
+        linear-gradient(180deg, #46e5ff, #0da0c5);
+      box-shadow:
+        -18px 0 0 0 rgba(70, 229, 255, 0.22),
+        -36px 0 0 0 rgba(70, 229, 255, 0.1);
+    }
+
+    .tutorial-visual.layers::before {
+      left: 26px;
+      top: 28px;
+      width: 46px;
+      height: 46px;
+      border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.18);
+      background: linear-gradient(135deg, rgba(255, 153, 102, 0.58), rgba(240, 75, 67, 0.5));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.16),
+        28px -14px 0 0 rgba(80, 255, 193, 0.18),
+        28px -14px 0 2px #8effc9;
+    }
+
+    .tutorial-visual.layers::after {
+      right: 26px;
+      top: 22px;
+      width: 16px;
+      height: 68px;
+      background: linear-gradient(180deg, #8effc9, #2bb98a);
+      clip-path: polygon(50% 0%, 100% 28%, 66% 28%, 66% 100%, 34% 100%, 34% 28%, 0% 28%);
+    }
+
+    .tutorial-visual.finish::before {
+      left: 18px;
+      bottom: 25px;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, #ffe067, #ff8c2a);
+      border-radius: 5px;
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.28),
+        56px 0 0 0 rgba(255, 255, 255, 0.08),
+        106px -8px 0 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .tutorial-visual.finish::after {
+      right: 22px;
+      top: 12px;
+      width: 20px;
+      height: 88px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.06)),
+        linear-gradient(180deg, #46e5ff, #0da0c5);
+      box-shadow:
+        -22px 0 0 0 rgba(70, 229, 255, 0.22),
+        -44px 0 0 0 rgba(70, 229, 255, 0.1);
+    }
+
+    .tutorial-visual.controls::before {
+      left: 16px;
+      bottom: 24px;
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #ffe067, #ff8c2a);
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.28),
+        102px 2px 0 0 rgba(255,255,255,0.08),
+        152px 2px 0 0 rgba(255,255,255,0.08);
+    }
+
+    .tutorial-visual.controls::after {
+      left: 56px;
+      bottom: 18px;
+      width: 112px;
+      height: 34px;
+      border-radius: 16px;
+      border: 2px solid rgba(255,255,255,0.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02)),
+        rgba(5, 18, 31, 0.42);
+      box-shadow:
+        inset 22px 10px 0 -7px #ffbf47,
+        inset 52px 10px 0 -7px #21a8d8,
+        inset 82px 10px 0 -7px #21a8d8;
     }
 
     .game-screen,
@@ -229,6 +914,10 @@
       background:
         linear-gradient(180deg, rgba(20, 116, 148, 0.24), rgba(3, 12, 23, 0.2)),
         #04131d;
+    }
+
+    #editorCanvas {
+      touch-action: none;
     }
 
     .game-viewport {
@@ -402,6 +1091,151 @@
       border: 2px solid rgba(255, 255, 255, 0.18);
       position: relative;
       overflow: hidden;
+    }
+
+    .skin-preview::before,
+    .skin-preview::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .skin-preview[data-skin="starter"]::before {
+      left: 11px;
+      bottom: 9px;
+      width: 30px;
+      height: 7px;
+      border-radius: 4px;
+      background: rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="emerald"]::before {
+      left: 15px;
+      top: 12px;
+      width: 6px;
+      height: 28px;
+      background: rgba(12, 49, 85, 0.92);
+      box-shadow: 16px 0 0 0 rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="sky"]::before {
+      left: 18px;
+      top: 18px;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="night"]::before {
+      left: 12px;
+      top: 12px;
+      width: 28px;
+      height: 6px;
+      background: rgba(12, 49, 85, 0.92);
+      box-shadow: 0 22px 0 0 rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="pulse"]::before {
+      left: 12px;
+      top: 18px;
+      width: 28px;
+      height: 14px;
+      background: transparent;
+      border-top: 3px solid rgba(255, 255, 255, 0.96);
+      border-right: 3px solid rgba(255, 255, 255, 0.96);
+      transform: skewX(-32deg) rotate(8deg);
+    }
+
+    .skin-preview[data-skin="architect"]::before {
+      left: 12px;
+      top: 12px;
+      width: 28px;
+      height: 4px;
+      background: rgba(12, 49, 85, 0.92);
+      box-shadow: 0 22px 0 0 rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="architect"]::after {
+      left: 24px;
+      top: 12px;
+      width: 4px;
+      height: 28px;
+      background: rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="publisher"]::before {
+      left: 16px;
+      top: 16px;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 3px solid rgba(255, 248, 209, 0.96);
+    }
+
+    .skin-preview[data-skin="tester"]::before {
+      left: 12px;
+      top: 12px;
+      width: 28px;
+      height: 28px;
+      background: rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="tester"]::after {
+      left: 21px;
+      top: 21px;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .skin-preview[data-skin="survivor"]::before {
+      left: 11px;
+      top: 24px;
+      width: 30px;
+      height: 4px;
+      background: rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="survivor"]::after {
+      left: 24px;
+      top: 11px;
+      width: 4px;
+      height: 30px;
+      background: rgba(12, 49, 85, 0.92);
+    }
+
+    .skin-preview[data-skin="gravity"]::before {
+      left: 16px;
+      top: 16px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 3px solid rgba(255, 255, 255, 0.96);
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      transform: rotate(-28deg);
+    }
+
+    .skin-preview[data-skin="gravity"]::after {
+      left: 28px;
+      top: 12px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid rgba(255, 255, 255, 0.96);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      transform: rotate(32deg);
+    }
+
+    .skin-preview[data-skin="bounce"]::before {
+      left: 16px;
+      top: 21px;
+      width: 18px;
+      height: 10px;
+      border: 3px solid rgba(255, 255, 255, 0.96);
+      border-bottom: 0;
+      border-radius: 18px 18px 0 0;
     }
 
     .skin-card h4,
@@ -620,6 +1454,31 @@
       border: 2px solid rgba(234, 255, 255, 0.8);
     }
 
+    .tool-icon.mini-block::before,
+    .tool-icon.mini-block::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      background: linear-gradient(135deg, #ff9966, #f04b43);
+    }
+
+    .tool-icon.mini-block::before {
+      left: 3px;
+      top: 3px;
+      box-shadow:
+        12px 0 0 0 rgba(0, 0, 0, 0),
+        0 12px 0 0 rgba(0, 0, 0, 0),
+        12px 12px 0 0 rgba(0, 0, 0, 0);
+    }
+
+    .tool-icon.mini-block::after {
+      left: 15px;
+      top: 15px;
+    }
+
     .tool-icon.dynamic-block::before {
       content: "";
       position: absolute;
@@ -653,6 +1512,18 @@
       background: #fff1ef;
       clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
       border: 1px solid #ff7380;
+    }
+
+    .tool-icon.saw::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #19384f 0 28%, transparent 28% 100%),
+        conic-gradient(from 0deg, #eefcff 0deg 18deg, #7fd7ff 18deg 36deg, #eefcff 36deg 54deg, #7fd7ff 54deg 72deg, #eefcff 72deg 90deg, #7fd7ff 90deg 108deg, #eefcff 108deg 126deg, #7fd7ff 126deg 144deg, #eefcff 144deg 162deg, #7fd7ff 162deg 180deg, #eefcff 180deg 198deg, #7fd7ff 198deg 216deg, #eefcff 216deg 234deg, #7fd7ff 234deg 252deg, #eefcff 252deg 270deg, #7fd7ff 270deg 288deg, #eefcff 288deg 306deg, #7fd7ff 306deg 324deg, #eefcff 324deg 342deg, #7fd7ff 342deg 360deg);
+      border: 2px solid rgba(225, 248, 255, 0.9);
+      box-shadow: 0 0 12px rgba(127, 215, 255, 0.4);
     }
 
     .tool-icon.platform::before {
@@ -825,6 +1696,79 @@
       border-top: 7px solid transparent;
       border-bottom: 7px solid transparent;
       border-left: 10px solid #b1ff83;
+    }
+
+    .tool-icon.invisible-trigger::before,
+    .tool-icon.invisible-trigger::after {
+      content: "";
+      position: absolute;
+    }
+
+    .tool-icon.invisible-trigger::before {
+      left: 4px;
+      top: 7px;
+      width: 16px;
+      height: 10px;
+      border: 2px solid #ffd78d;
+      border-radius: 10px 10px 8px 8px;
+      box-sizing: border-box;
+    }
+
+    .tool-icon.invisible-trigger::after {
+      left: 11px;
+      top: 5px;
+      width: 2px;
+      height: 16px;
+      background: #ff6f7a;
+      transform: rotate(45deg);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.14);
+    }
+
+    .tool-icon.route-pointer::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 9px;
+      width: 14px;
+      height: 10px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #7dd7ff, #2f9dff);
+      box-shadow: 0 0 10px rgba(111, 213, 255, 0.34);
+    }
+
+    .tool-icon.route-pointer::after {
+      content: "";
+      position: absolute;
+      right: 3px;
+      top: 6px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 11px solid #bff6ff;
+    }
+
+    .tool-icon.route-trigger::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 12px;
+      width: 12px;
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #ffe180, #ffbf47);
+    }
+
+    .tool-icon.route-trigger::after {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 6px;
+      width: 11px;
+      height: 16px;
+      clip-path: polygon(0 0, 100% 50%, 0 100%, 28% 50%);
+      background: linear-gradient(180deg, #fff0c4, #ff8f45);
+      box-shadow: 0 0 10px rgba(255, 191, 71, 0.34);
     }
 
     .tool-icon.group::before {
@@ -1016,6 +1960,24 @@
         grid-template-columns: 1fr 1fr;
       }
 
+      .menu-tile-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .tutorial-page {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .tutorial-card.wide {
+        grid-column: span 2;
+        grid-template-columns: 1fr;
+      }
+
+      .menu-tile,
+      .menu-tile.primary {
+        min-height: 200px;
+      }
+
       .side-panel {
         max-height: 46vh;
       }
@@ -1050,6 +2012,16 @@
         overflow: auto;
       }
 
+      .hero-menu {
+        padding-top: 56px;
+        justify-content: flex-start;
+      }
+
+      .profile-corner {
+        right: 0;
+        width: 100%;
+      }
+
       [data-screen="menu"] .card-grid {
         display: none;
       }
@@ -1081,8 +2053,13 @@
       }
 
       .card-grid,
+      .tutorial-page,
       .skin-grid {
         grid-template-columns: 1fr;
+      }
+
+      .tutorial-card.wide {
+        grid-column: auto;
       }
 
       .info-card,
@@ -1338,36 +2315,29 @@
   <div class="app">
     <section class="screen menu-screen active" data-screen="menu">
       <div class="menu-panel">
-        <div>
-          <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Arcade Platformer</p>
+        <div class="hero-menu">
+          <button class="ghost tutorial-corner" id="tutorialBtn">Обучение</button>
+          <button class="ghost profile-corner" id="profileBtn">Профиль</button>
           <h1 class="title">Neon<br>Dash</h1>
-          <p class="subtitle">
-            Маленькая браузерная копия в духе Geometry Dash: три демо-уровня с постепенным вводом механик,
-            прыжок по пробелу и полноценный редактор, где можно построить и сразу пройти свой уровень.
-          </p>
-          <div class="menu-actions">
-            <button id="playBtn">Играть</button>
-            <button class="secondary" id="editorBtn">Открыть редактор</button>
-            <button class="secondary" id="savedLevelsBtn">Сохранённые уровни</button>
-            <button class="secondary" id="profileBtn">Профиль</button>
-          </div>
-        </div>
-        <div class="card-grid">
-          <div class="info-card">
-            <h3>Как играть</h3>
-            <p>Нажимай <code>Пробел</code>, <code>W</code> или клик по канвасу, чтобы прыгать через шипы и платформы.</p>
-          </div>
-          <div class="info-card">
-            <h3>Демо-уровни</h3>
-            <p>В первом уровне только база, во втором появляются триггеры, а в третьем уже собраны продвинутые механики.</p>
-          </div>
-          <div class="info-card">
-            <h3>Как редактировать</h3>
-            <p>В редакторе выбирай инструмент и кликай по сетке. Кнопка запуска сразу перенесет тебя в уровень.</p>
-          </div>
-          <div class="info-card">
-            <h3>Без прокрутки</h3>
-            <p>Меню, игра и редактор живут в одном экране и открываются по кнопкам, а не как длинная страница.</p>
+          <div class="menu-tile-wrap">
+            <button class="menu-tile-btn" id="editorBtn">
+              <span class="menu-tile">
+                <span class="menu-tile-icon tools"></span>
+                <h3>Редактор</h3>
+              </span>
+            </button>
+            <button class="menu-tile-btn" id="playBtn">
+              <span class="menu-tile primary">
+                <span class="menu-tile-icon play"></span>
+                <h3>Играть</h3>
+              </span>
+            </button>
+            <button class="menu-tile-btn" id="savedLevelsBtn">
+              <span class="menu-tile">
+                <span class="menu-tile-icon files"></span>
+                <h3>Сохранения</h3>
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -1378,23 +2348,10 @@
         <div>
           <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Play Menu</p>
           <h1 class="title">Play<br>Levels</h1>
-          <p class="subtitle">
-            Здесь можно выбрать официальные уровни или пользовательские уровни, опубликованные другими игроками.
-          </p>
           <div class="menu-actions">
             <button id="officialLevelsBtn">Официальные уровни</button>
             <button class="secondary" id="userLevelsBtn">Пользовательские уровни</button>
             <button class="ghost" id="backToMenuFromPlay">В меню</button>
-          </div>
-        </div>
-        <div class="card-grid">
-          <div class="info-card">
-            <h3>Официальные</h3>
-            <p>Три встроенных демо-уровня с разной музыкой и постепенным добавлением механик.</p>
-          </div>
-          <div class="info-card">
-            <h3>Пользовательские</h3>
-            <p>Тут будут уровни других игроков с именем автора, чтобы проходить их как отдельную подборку.</p>
           </div>
         </div>
       </div>
@@ -1405,9 +2362,6 @@
         <div>
           <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Community Levels</p>
           <h1 class="title">User<br>Levels</h1>
-          <p class="subtitle">
-            Выбери опубликованный уровень другого игрока. Список загружается из общей онлайн-базы и должен быть одинаковым на разных устройствах.
-          </p>
           <div class="field level-search">
             <label for="userLevelsSearch">Поиск по названию</label>
             <input id="userLevelsSearch" type="text" placeholder="Например, Pulse Run">
@@ -1423,10 +2377,6 @@
             <h3>Автор</h3>
             <p id="userLevelAuthorLabel">Автор: неизвестно</p>
           </div>
-          <div class="info-card">
-            <h3>Как это работает</h3>
-            <p>Опубликованные уровни берутся из сохранений и показываются здесь с названием и ником автора.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -1436,20 +2386,11 @@
         <div>
           <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Official Levels</p>
           <h1 class="title">Official<br>Levels</h1>
-          <p class="subtitle">
-            Эти уровни названы по музыке, которая играет в них во время прохождения.
-          </p>
           <div class="menu-actions">
             <button id="playDemo1Btn">Pulse Run</button>
             <button id="playDemo2Btn">Sky Loop</button>
             <button id="playDemo3Btn">Night Drive</button>
             <button class="ghost" id="backToPlayMenu">Назад</button>
-          </div>
-        </div>
-        <div class="card-grid">
-          <div class="info-card">
-            <h3>Порядок</h3>
-            <p>Сначала база, потом триггеры, а в последнем уровне уже более сложные механики.</p>
           </div>
         </div>
       </div>
@@ -1460,9 +2401,6 @@
         <div>
           <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Level Storage</p>
           <h1 class="title">Saved<br>Levels</h1>
-          <p class="subtitle">
-            Здесь можно загрузить или удалить уровень, который ты сохранил по названию.
-          </p>
           <div class="field">
             <label for="savedLevelsSelect">Сохранённые уровни</label>
             <select id="savedLevelsSelect">
@@ -1476,20 +2414,6 @@
             <button class="ghost" id="backToMenuFromSaved">В меню</button>
           </div>
         </div>
-        <div class="card-grid">
-          <div class="info-card">
-            <h3>Загрузка</h3>
-            <p>Выбери уровень из списка и нажми загрузку, чтобы сразу открыть его в редакторе.</p>
-          </div>
-          <div class="info-card">
-            <h3>Удаление</h3>
-            <p>Если уровень больше не нужен, его можно удалить из сохранений отдельно от редактора.</p>
-          </div>
-          <div class="info-card">
-            <h3>Публикация</h3>
-            <p>Публикация добавит сохраненный уровень в список пользовательских уровней вместе с именем автора.</p>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1498,9 +2422,6 @@
         <div>
           <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Player Profile</p>
           <h1 class="title">Your<br>Profile</h1>
-          <p class="subtitle">
-            Здесь можно один раз задать никнейм для публикации уровней. После подтверждения его уже нельзя будет изменить.
-          </p>
           <div class="field">
             <label for="profileNicknameInput">Никнейм</label>
             <input id="profileNicknameInput" type="text" maxlength="20" placeholder="Например, NeonBuilder">
@@ -1515,14 +2436,150 @@
             <button class="ghost" id="backToMenuFromProfile">В меню</button>
           </div>
         </div>
-        <div class="card-grid">
-          <div class="info-card">
-            <h3>Важно</h3>
-            <p>Перед сохранением появится предупреждение, что никнейм закрепляется навсегда для этой игры в этом браузере.</p>
+        <div class="info-card">
+          <h3>Выбранный скин</h3>
+          <p id="selectedSkinText">Сейчас выбран базовый скин.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen menu-screen" data-screen="tutorial">
+      <div class="menu-panel">
+        <div>
+          <p class="chip" style="display:inline-flex; align-items:center; gap:8px;">Tutorial</p>
+          <h1 class="title">Как<br>Играть</h1>
+          <div class="menu-actions">
+            <button class="ghost" id="backToMenuFromTutorial">В меню</button>
           </div>
-          <div class="info-card">
-            <h3>Выбранный скин</h3>
-            <p id="selectedSkinText">Сейчас выбран базовый скин.</p>
+        </div>
+        <div class="tutorial-shell">
+          <div class="tutorial-page active" data-tutorial-page="0">
+            <div class="tutorial-card wide">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="menu"></div></div>
+              <div>
+                <h3>Главное меню</h3>
+                <div class="tutorial-tip-list">
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">1</span>
+                    <span>В главном меню нажми большую кнопку <strong>Играть</strong>.</span>
+                  </div>
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">2</span>
+                    <span>Потом выбери официальный или пользовательский уровень.</span>
+                  </div>
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">3</span>
+                    <span>Кнопка <strong>Профиль</strong> сверху открывает ник и скины куба.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual use-canvas"><canvas class="tutorial-scene" data-scene="jump"></canvas></div>
+              <h3>Прыжок</h3>
+              <p>Нажимай <strong>пробел</strong>, <strong>W</strong> или просто <strong>тапай</strong> по экрану. Куб прыгает по дуге и перелетает шипы.</p>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual use-canvas"><canvas class="tutorial-scene" data-scene="finish"></canvas></div>
+              <h3>Финиш</h3>
+              <p>Долетай до светящейся стены в конце трассы. Она втянет куб и завершит уровень.</p>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual use-canvas"><canvas class="tutorial-scene" data-scene="hazards"></canvas></div>
+              <h3>Что опасно</h3>
+              <p>Шипы и пилы убивают сразу. На картинке показаны оба основных опасных объекта.</p>
+            </div>
+          </div>
+
+          <div class="tutorial-page" data-tutorial-page="1">
+            <div class="tutorial-card wide">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="editor"></div></div>
+              <div>
+                <h3>Редактор уровней</h3>
+                <div class="tutorial-tip-list">
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">1</span>
+                    <span>Сначала выбери объект сверху, потом ставь его по клеткам.</span>
+                  </div>
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">2</span>
+                    <span><strong>Передний</strong> слой твёрдый, а <strong>задний</strong> нужен только для декора.</span>
+                  </div>
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">3</span>
+                    <span>Можно выделять сразу несколько объектов и менять их вместе.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="save"></div></div>
+              <h3>Сохранение</h3>
+              <p>Нажми паузу в редакторе. В открывшемся окне жми <strong>Сохранить</strong> и задай имя.</p>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="layers"></div></div>
+              <h3>Слои и группы</h3>
+              <p>Кнопки <strong>Перед</strong> и <strong>Задний</strong> переключают слой. Задние объекты темнее и не имеют хитбокса.</p>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="build"></div></div>
+              <h3>Сборка трассы</h3>
+              <p>Сверху выбирай объект: блок, шип или триггер. Потом ставь его по сетке внизу.</p>
+            </div>
+          </div>
+
+          <div class="tutorial-page" data-tutorial-page="2">
+            <div class="tutorial-card wide">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="publish"></div></div>
+              <div>
+                <h3>Публикация уровня</h3>
+                <div class="tutorial-tip-list">
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">1</span>
+                    <span>Сначала сохрани уровень и сам пройди его до конца.</span>
+                  </div>
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">2</span>
+                    <span>Если после победы что-то поменять, проверка сбросится.</span>
+                  </div>
+                  <div class="tutorial-tip">
+                    <span class="tutorial-tip-number">3</span>
+                    <span>Только после этого нажимай <strong>Опубликовать</strong>, и уровень увидят другие.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual use-canvas"><canvas class="tutorial-scene" data-scene="verify"></canvas></div>
+              <h3>Проверка</h3>
+              <p>Уровень считается проверенным только если ты сам дошёл до финиша этой версии уровня.</p>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual"><div class="tutorial-dom-shot" data-dom-scene="community"></div></div>
+              <h3>Пользовательские уровни</h3>
+              <p>В этом разделе есть поиск, список уровней и кнопка <strong>Играть</strong> для запуска выбранной карты.</p>
+            </div>
+            <div class="tutorial-card">
+              <div class="tutorial-visual use-canvas"><canvas class="tutorial-scene" data-scene="quality"></canvas></div>
+              <h3>Хороший уровень</h3>
+              <p>Хороший уровень читается глазами: препятствия идут в ритм и не выглядят случайной кучей.</p>
+            </div>
+          </div>
+
+          <div class="tutorial-nav">
+            <div class="tutorial-progress">
+              <span id="tutorialPageText">Страница 1 / 3</span>
+              <div class="tutorial-dots">
+                <span class="tutorial-dot active" data-tutorial-dot="0"></span>
+                <span class="tutorial-dot" data-tutorial-dot="1"></span>
+                <span class="tutorial-dot" data-tutorial-dot="2"></span>
+              </div>
+            </div>
+            <div class="tutorial-nav-actions">
+              <button class="ghost" id="tutorialPrevBtn">Назад</button>
+              <button id="tutorialNextBtn">Дальше</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1553,7 +2610,6 @@
             </div>
           </div>
         </div>
-        <p class="hud-note">Уровень использует текущую карту редактора, так что можно строить свои трассы и тут же их тестировать.</p>
       </div>
     </section>
 
@@ -1566,9 +2622,7 @@
             <div class="badge" id="selectedToolLabel">Инструмент: Блок</div>
           </div>
           <div class="toolbar-actions">
-            <button class="ghost" id="backToMenuFromEditor">В меню</button>
-            <button class="secondary" id="groupModeBtn">Добавить группу</button>
-            <button class="secondary" id="testLevelBtn">Тестировать уровень</button>
+            <button class="secondary" id="editorPauseBtn">Пауза</button>
           </div>
         </div>
         <div class="editor-layout">
@@ -1587,6 +2641,11 @@
                 <span id="editorScrollLabel">0%</span>
               </div>
               <input id="editorScroll" type="range" min="0" max="960" step="1" value="0">
+              <div class="layer-switch">
+                <p class="mini-text">Слой редактора</p>
+                <button class="secondary active" id="editorFrontLayerBtn" type="button">Передний</button>
+                <button class="ghost" id="editorBackLayerBtn" type="button">Задний</button>
+              </div>
             </div>
             <canvas id="editorCanvas" width="960" height="420"></canvas>
           </div>
@@ -1615,12 +2674,14 @@
               </div>
               <div class="tool-page" data-tool-page="build-2" data-tool-section="build">
                 <div class="tool-grid">
+                  <button class="tool" data-tool="miniBlock" title="Мини-блок"><span class="tool-icon mini-block"></span></button>
                   <button class="tool" data-tool="platform" title="Платформа"><span class="tool-icon platform"></span></button>
                 </div>
               </div>
               <div class="tool-page" data-tool-page="hazards-1" data-tool-section="hazards">
                 <div class="tool-grid">
                   <button class="tool" data-tool="spike" title="Шип"><span class="tool-icon spike"></span></button>
+                  <button class="tool" data-tool="saw" title="Пила"><span class="tool-icon saw"></span></button>
                 </div>
               </div>
               <div class="tool-page" data-tool-page="orbs-1" data-tool-section="orbs">
@@ -1632,15 +2693,22 @@
               <div class="tool-page" data-tool-page="triggers-1" data-tool-section="triggers">
                 <div class="tool-grid">
                   <button class="tool" data-tool="trigger" title="Color Trigger"><span class="tool-icon trigger"></span></button>
+                  <button class="tool" data-tool="invisibleTrigger" title="Invisible Trigger"><span class="tool-icon invisible-trigger"></span></button>
                   <button class="tool" data-tool="pulse" title="Pulse Trigger"><span class="tool-icon pulse"></span></button>
                   <button class="tool" data-tool="move" title="Move Trigger"><span class="tool-icon move"></span></button>
-                  <button class="tool" data-tool="dynamicBlock" title="Динамический блок"><span class="tool-icon dynamic-block"></span></button>
                 </div>
               </div>
               <div class="tool-page" data-tool-page="triggers-2" data-tool-section="triggers">
                 <div class="tool-grid">
                   <button class="tool" data-tool="start" title="Старт"><span class="tool-icon start"></span></button>
                   <button class="tool" data-tool="finish" title="Финиш"><span class="tool-icon finish"></span></button>
+                  <button class="tool" data-tool="routePointer" title="Указатель"><span class="tool-icon route-pointer"></span></button>
+                  <button class="tool" data-tool="routeTrigger" title="Маршрутный триггер"><span class="tool-icon route-trigger"></span></button>
+                </div>
+              </div>
+              <div class="tool-page" data-tool-page="triggers-3" data-tool-section="triggers">
+                <div class="tool-grid">
+                  <button class="tool" data-tool="dynamicBlock" title="Динамический блок"><span class="tool-icon dynamic-block"></span></button>
                 </div>
               </div>
               <div class="tool-page" data-tool-page="debug-1" data-tool-section="debug">
@@ -1685,11 +2753,11 @@
               </select>
             </div>
             <div class="field">
-              <label for="levelNameInput">Название уровня</label>
-              <input id="levelNameInput" type="text" placeholder="Мой уровень" value="Новый уровень">
+              <label for="levelBackgroundInput">Цвет заднего экрана</label>
+              <input id="levelBackgroundInput" type="color" value="#0c2c47">
             </div>
             <div class="editor-actions">
-              <button id="saveLevelBtn">Сохранить уровень</button>
+              <button class="secondary" id="testLevelBtn">Тестировать уровень</button>
             </div>
             <div class="editor-actions">
               <button class="secondary" id="clearBtn">Очистить карту</button>
@@ -1704,7 +2772,6 @@
   <div class="modal-overlay" id="groupModal">
     <div class="modal-card">
       <h3 id="groupModalTitle">Номер объекта</h3>
-      <p class="mini-text">Этот номер можно использовать как цель для color trigger.</p>
       <div class="field">
         <label for="groupInput">Номер группы</label>
         <input id="groupInput" type="number" min="0" step="1" value="0">
@@ -1716,17 +2783,54 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="editorPauseModal">
+    <div class="modal-card">
+      <h3>Пауза</h3>
+      <div class="modal-actions">
+        <button id="pauseSaveLevelBtn">Сохранить уровень</button>
+        <button class="secondary" id="pauseToMenuBtn">В меню</button>
+        <button class="ghost" id="closeEditorPauseBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="levelSaveModal">
+    <div class="modal-card">
+      <h3>Название уровня</h3>
+      <div class="field">
+        <label for="levelNameInput">Название уровня</label>
+        <input id="levelNameInput" type="text" placeholder="Мой уровень" value="Новый уровень">
+      </div>
+      <div class="modal-actions">
+        <button id="saveLevelBtn">Сохранить уровень</button>
+        <button class="ghost" id="closeLevelSaveBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="triggerModal">
     <div class="modal-card">
-      <h3>Настройка Color Trigger</h3>
-      <p class="mini-text">При касании этого объекта все элементы выбранной группы сменят цвет.</p>
+      <h3 id="triggerModalTitle">Настройка Color Trigger</h3>
+      <p class="mini-text" id="triggerModalDescription">При касании этого объекта все элементы выбранной группы сменят цвет.</p>
+      <div class="field" id="triggerTargetTypeField">
+        <label for="triggerTargetTypeInput">Что окрасить</label>
+        <select id="triggerTargetTypeInput">
+          <option value="group">Группу</option>
+          <option value="background">Задний экран</option>
+          <option value="ground">Пол</option>
+        </select>
+      </div>
       <div class="field">
         <label for="triggerTargetInput">Номер группы</label>
         <input id="triggerTargetInput" type="number" min="0" step="1" value="1">
       </div>
-      <div class="field">
+      <div class="field" id="triggerColorField">
         <label for="triggerColorInput">Новый цвет</label>
         <input id="triggerColorInput" type="color" value="#ff5c6c">
+      </div>
+      <div class="field hidden" id="triggerDeactivateField">
+        <label for="triggerDeactivateInput">Режим деактивации</label>
+        <input id="triggerDeactivateInput" type="checkbox">
       </div>
       <div class="modal-actions">
         <button id="saveTriggerBtn">Сохранить</button>
@@ -1851,6 +2955,41 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="routeModal">
+    <div class="modal-card">
+      <h3 id="routeModalTitle">Настройка указателя</h3>
+      <p class="mini-text" id="routeModalDescription">Укажи номер стрелочки и время, за которое группа дойдет от нее до следующей.</p>
+      <div id="routePointerPanel">
+        <div class="field">
+          <label for="routePointerNumberInput">Номер указателя</label>
+          <input id="routePointerNumberInput" type="number" min="1" step="1" value="1">
+        </div>
+        <div class="field">
+          <label for="routePointerDurationInput">Время до следующего</label>
+          <input id="routePointerDurationInput" type="number" min="0.1" step="0.1" value="1">
+        </div>
+      </div>
+      <div id="routeTriggerPanel" class="hidden">
+        <div class="field">
+          <label for="routeTriggerTargetInput">Группа, которую двигаем</label>
+          <input id="routeTriggerTargetInput" type="number" min="0" step="1" value="1">
+        </div>
+        <div class="field">
+          <label for="routeTriggerStartInput">Начальный номер</label>
+          <input id="routeTriggerStartInput" type="number" min="1" step="1" value="1">
+        </div>
+        <div class="field">
+          <label for="routeTriggerEndInput">Конечный номер</label>
+          <input id="routeTriggerEndInput" type="number" min="1" step="1" value="3">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="saveRouteBtn">Сохранить</button>
+        <button class="ghost" id="closeRouteBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toastMessage" aria-live="polite"></div>
 
   <script>
@@ -1860,6 +2999,7 @@
       official: document.querySelector('[data-screen="official"]'),
       userLevels: document.querySelector('[data-screen="user-levels"]'),
       saved: document.querySelector('[data-screen="saved"]'),
+      tutorial: document.querySelector('[data-screen="tutorial"]'),
       profile: document.querySelector('[data-screen="profile"]'),
       game: document.querySelector('[data-screen="game"]'),
       editor: document.querySelector('[data-screen="editor"]')
@@ -1888,18 +3028,41 @@
     const editorScroll = document.getElementById('editorScroll');
     const editorScrollLabel = document.getElementById('editorScrollLabel');
     const editorZoomLabel = document.getElementById('editorZoomLabel');
+    const editorFrontLayerBtn = document.getElementById('editorFrontLayerBtn');
+    const editorBackLayerBtn = document.getElementById('editorBackLayerBtn');
     const zoomOutBtn = document.getElementById('zoomOutBtn');
     const zoomInBtn = document.getElementById('zoomInBtn');
     const groupModal = document.getElementById('groupModal');
+    const editorPauseModal = document.getElementById('editorPauseModal');
+    const levelSaveModal = document.getElementById('levelSaveModal');
     const triggerModal = document.getElementById('triggerModal');
     const pulseModal = document.getElementById('pulseModal');
     const moveModal = document.getElementById('moveModal');
     const dynamicBlockModal = document.getElementById('dynamicBlockModal');
+    const routeModal = document.getElementById('routeModal');
+    const tutorialPages = Array.from(document.querySelectorAll('[data-tutorial-page]'));
+    const tutorialDots = Array.from(document.querySelectorAll('[data-tutorial-dot]'));
+    const tutorialPageText = document.getElementById('tutorialPageText');
+    const tutorialPrevBtn = document.getElementById('tutorialPrevBtn');
+    const tutorialNextBtn = document.getElementById('tutorialNextBtn');
+    let tutorialPageIndex = 0;
+    const editorPauseBtn = document.getElementById('editorPauseBtn');
+    const pauseSaveLevelBtn = document.getElementById('pauseSaveLevelBtn');
+    const pauseToMenuBtn = document.getElementById('pauseToMenuBtn');
+    const closeEditorPauseBtn = document.getElementById('closeEditorPauseBtn');
+    const closeLevelSaveBtn = document.getElementById('closeLevelSaveBtn');
     const groupModeBtn = document.getElementById('groupModeBtn');
     const groupModalTitle = document.getElementById('groupModalTitle');
     const groupInput = document.getElementById('groupInput');
+    const triggerModalTitle = document.getElementById('triggerModalTitle');
+    const triggerModalDescription = document.getElementById('triggerModalDescription');
+    const triggerTargetTypeField = document.getElementById('triggerTargetTypeField');
+    const triggerTargetTypeInput = document.getElementById('triggerTargetTypeInput');
     const triggerTargetInput = document.getElementById('triggerTargetInput');
     const triggerColorInput = document.getElementById('triggerColorInput');
+    const triggerColorField = document.getElementById('triggerColorField');
+    const triggerDeactivateField = document.getElementById('triggerDeactivateField');
+    const triggerDeactivateInput = document.getElementById('triggerDeactivateInput');
     const pulseTargetInput = document.getElementById('pulseTargetInput');
     const pulseSpeedInput = document.getElementById('pulseSpeedInput');
     const pulseModeInput = document.getElementById('pulseModeInput');
@@ -1932,8 +3095,18 @@
     const dynamicTouchGroupInput = document.getElementById('dynamicTouchGroupInput');
     const dynamicActivateGroupInput = document.getElementById('dynamicActivateGroupInput');
     const dynamicTouchableInput = document.getElementById('dynamicTouchableInput');
+    const routeModalTitle = document.getElementById('routeModalTitle');
+    const routeModalDescription = document.getElementById('routeModalDescription');
+    const routePointerPanel = document.getElementById('routePointerPanel');
+    const routeTriggerPanel = document.getElementById('routeTriggerPanel');
+    const routePointerNumberInput = document.getElementById('routePointerNumberInput');
+    const routePointerDurationInput = document.getElementById('routePointerDurationInput');
+    const routeTriggerTargetInput = document.getElementById('routeTriggerTargetInput');
+    const routeTriggerStartInput = document.getElementById('routeTriggerStartInput');
+    const routeTriggerEndInput = document.getElementById('routeTriggerEndInput');
     const levelMusicSelect = document.getElementById('levelMusicSelect');
     const levelNameInput = document.getElementById('levelNameInput');
+    const levelBackgroundInput = document.getElementById('levelBackgroundInput');
     const savedLevelsSelect = document.getElementById('savedLevelsSelect');
     const publishLevelBtn = document.getElementById('publishLevelBtn');
     const saveLevelBtn = document.getElementById('saveLevelBtn');
@@ -1965,16 +3138,16 @@
     };
     const skinCatalog = [
       { id: 'starter', name: 'Starter', unlockText: 'Первый вход', unlocked: () => true, colors: ['#ffe067', '#ff8c2a'] },
-      { id: 'emerald', name: 'Emerald', unlockText: 'Пройди 1 уровень', unlocked: (stats) => stats.totalWins >= 1, colors: ['#b6ff6e', '#2ec66b'] },
-      { id: 'sky', name: 'Sky', unlockText: 'Пройди Sky Loop', unlocked: (stats) => stats.officialWins.skyLoop >= 1, colors: ['#9fe7ff', '#2d8fff'] },
-      { id: 'night', name: 'Night', unlockText: 'Пройди Night Drive', unlocked: (stats) => stats.officialWins.nightDrive >= 1, colors: ['#c3b6ff', '#5a47ff'] },
-      { id: 'pulse', name: 'Pulse', unlockText: 'Пройди Pulse Run', unlocked: (stats) => stats.officialWins.pulseRun >= 1, colors: ['#ff9e8c', '#ff4a55'] },
-      { id: 'architect', name: 'Architect', unlockText: 'Сохрани 3 уровня', unlocked: (stats) => stats.savedLevels >= 3, colors: ['#ffd18d', '#d88534'] },
-      { id: 'publisher', name: 'Publisher', unlockText: 'Опубликуй 1 уровень', unlocked: (stats) => stats.publishedLevels >= 1, colors: ['#fff0a0', '#ffbf47'] },
-      { id: 'tester', name: 'Tester', unlockText: 'Протестируй 5 своих уровней', unlocked: (stats) => stats.editorWins >= 5, colors: ['#a9fff3', '#1ab7a2'] },
-      { id: 'survivor', name: 'Survivor', unlockText: 'Погибни 10 раз', unlocked: (stats) => stats.deaths >= 10, colors: ['#ffb7c3', '#c73e63'] },
-      { id: 'gravity', name: 'Gravity', unlockText: 'Используй 10 орбов гравитации', unlocked: (stats) => stats.gravityFlips >= 10, colors: ['#e2f5ff', '#4aa7ff'] },
-      { id: 'bounce', name: 'Bounce', unlockText: 'Используй 10 батутов', unlocked: (stats) => stats.bounces >= 10, colors: ['#d6ff9f', '#63d647'] }
+      { id: 'emerald', name: 'Emerald', unlockText: 'Пройди 5 уровней', unlocked: (stats) => stats.totalWins >= 5, colors: ['#b6ff6e', '#2ec66b'] },
+      { id: 'sky', name: 'Sky', unlockText: 'Пройди Sky Loop 3 раза', unlocked: (stats) => stats.officialWins.skyLoop >= 3, colors: ['#9fe7ff', '#2d8fff'] },
+      { id: 'night', name: 'Night', unlockText: 'Пройди Night Drive 3 раза', unlocked: (stats) => stats.officialWins.nightDrive >= 3, colors: ['#c3b6ff', '#5a47ff'] },
+      { id: 'pulse', name: 'Pulse', unlockText: 'Пройди Pulse Run 5 раз', unlocked: (stats) => stats.officialWins.pulseRun >= 5, colors: ['#ff9e8c', '#ff4a55'] },
+      { id: 'architect', name: 'Architect', unlockText: 'Сохрани 10 уровней', unlocked: (stats) => stats.savedLevels >= 10, colors: ['#ffd18d', '#d88534'] },
+      { id: 'publisher', name: 'Publisher', unlockText: 'Опубликуй 5 уровней', unlocked: (stats) => stats.publishedLevels >= 5, colors: ['#fff0a0', '#ffbf47'] },
+      { id: 'tester', name: 'Tester', unlockText: 'Протестируй 20 своих уровней', unlocked: (stats) => stats.editorWins >= 20, colors: ['#a9fff3', '#1ab7a2'] },
+      { id: 'survivor', name: 'Survivor', unlockText: 'Погибни 50 раз', unlocked: (stats) => stats.deaths >= 50, colors: ['#ffb7c3', '#c73e63'] },
+      { id: 'gravity', name: 'Gravity', unlockText: 'Используй 40 орбов гравитации', unlocked: (stats) => stats.gravityFlips >= 40, colors: ['#e2f5ff', '#4aa7ff'] },
+      { id: 'bounce', name: 'Bounce', unlockText: 'Используй 40 батутов', unlocked: (stats) => stats.bounces >= 40, colors: ['#d6ff9f', '#63d647'] }
     ];
     let remoteUserLevels = {};
     let userLevelsLoading = false;
@@ -2306,17 +3479,23 @@
       return {
         name: 'Новый уровень',
         musicId: 'sky-loop',
-        start: { x: 2, y: 9, group: 0 },
-        finish: { x: 115, y: 9, group: 0 },
+        backgroundColor: '#0c2c47',
+        groundColor: '#0a8ea2',
+        start: { x: 2, y: 9, group: 0, layer: 'front' },
+        finish: { x: 115, y: 9, group: 0, layer: 'front' },
         blocks: [],
         spikes: [],
+        saws: [],
         bounces: [],
         dynamicBlocks: [],
         gravityOrbs: [],
         platforms: [],
         triggers: [],
+        invisibleTriggers: [],
         pulseTriggers: [],
-        moveTriggers: []
+        moveTriggers: [],
+        routePointers: [],
+        routeTriggers: []
       };
     }
 
@@ -2331,11 +3510,15 @@
     let restartTimer = 0;
     let editorCameraX = 0;
     let editorZoom = 1;
+    let editorBuildLayer = 'front';
     let activeGroupColors = {};
+    let activeGroupVisibility = {};
+    let activePlayerHidden = false;
     let activatedTriggers = new Set();
     let activePulses = {};
     let activeGroupOffsets = {};
     let activeMoveAnimations = {};
+    let activeRouteAnimations = {};
     let activatedDynamicBlocks = new Set();
     let audioContext = null;
     let currentMusicId = '';
@@ -2347,12 +3530,16 @@
     let editedObject = null;
     let editedObjects = [];
     let editedTrigger = null;
+    let editedTriggerType = 'color';
     let editedPulseTrigger = null;
     let editedMoveTrigger = null;
     let editedDynamicBlock = null;
+    let editedRoutePointer = null;
+    let editedRouteTrigger = null;
     let groupAssignMode = false;
     let transformSelectionMode = null;
     let selectionDrag = null;
+    let selectionPointerId = null;
     let skipNextEditorClick = false;
     let selectedTransformObjects = [];
     let selectedDemoLevelIndex = 0;
@@ -2364,25 +3551,39 @@
       build: { label: 'Строительные блоки', pages: ['build-1', 'build-2'] },
       hazards: { label: 'Препятствия', pages: ['hazards-1'] },
       orbs: { label: 'Орбы и пады', pages: ['orbs-1'] },
-      triggers: { label: 'Триггеры', pages: ['triggers-1', 'triggers-2'] },
+      triggers: { label: 'Триггеры', pages: ['triggers-1', 'triggers-2', 'triggers-3'] },
       debug: { label: 'Отладка', pages: ['debug-1', 'debug-2', 'debug-3', 'debug-4'] }
     };
+
+    function normalizeLayer(layer) {
+      return layer === 'back' ? 'back' : 'front';
+    }
+
+    function layerOf(item) {
+      return normalizeLayer(item?.layer);
+    }
 
     function cloneLevel(source) {
       return {
         name: source.name ?? 'Новый уровень',
         musicId: source.musicId ?? 'pulse-run',
-        start: { ...source.start, group: source.start.group ?? 0, angle: source.start.angle ?? 0 },
-        finish: { ...source.finish, group: source.finish.group ?? 0, angle: source.finish.angle ?? 0 },
-        blocks: source.blocks.map((item) => ({ ...item, group: item.group ?? 0, variant: item.variant ?? 'solid', angle: item.angle ?? 0 })),
-        spikes: source.spikes.map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0 })),
-        bounces: (source.bounces ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0 })),
-        dynamicBlocks: (source.dynamicBlocks ?? []).map((item) => ({ ...item, group: item.group ?? 0, touchGroup: item.touchGroup ?? 0, activateGroup: item.activateGroup ?? 0, touchable: Boolean(item.touchable), angle: item.angle ?? 0 })),
-        gravityOrbs: (source.gravityOrbs ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0 })),
-        platforms: (source.platforms ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0 })),
-        triggers: (source.triggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, targetGroup: item.targetGroup ?? 0, color: item.color ?? '#ff5c6c', angle: item.angle ?? 0 })),
-        pulseTriggers: (source.pulseTriggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, targetGroup: item.targetGroup ?? 0, speed: item.speed ?? 2, mode: item.mode ?? 'outer', angle: item.angle ?? 0 })),
-        moveTriggers: (source.moveTriggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, mode: item.mode ?? 'move', targetGroup: item.targetGroup ?? 0, direction: item.direction ?? 'right', amount: item.amount ?? 4, duration: item.duration ?? 1.5, followGroup: item.followGroup ?? '0', axis: item.axis ?? 'both', angle: item.angle ?? 0 }))
+        backgroundColor: source.backgroundColor ?? '#0c2c47',
+        groundColor: source.groundColor ?? '#0a8ea2',
+        start: { ...source.start, group: source.start.group ?? 0, angle: source.start.angle ?? 0, layer: normalizeLayer(source.start.layer) },
+        finish: { ...source.finish, group: source.finish.group ?? 0, angle: source.finish.angle ?? 0, layer: normalizeLayer(source.finish.layer) },
+        blocks: source.blocks.map((item) => ({ ...item, group: item.group ?? 0, variant: item.variant ?? 'solid', angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        spikes: source.spikes.map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        saws: (source.saws ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        bounces: (source.bounces ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        dynamicBlocks: (source.dynamicBlocks ?? []).map((item) => ({ ...item, group: item.group ?? 0, touchGroup: item.touchGroup ?? 0, activateGroup: item.activateGroup ?? 0, touchable: Boolean(item.touchable), angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        gravityOrbs: (source.gravityOrbs ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        platforms: (source.platforms ?? []).map((item) => ({ ...item, group: item.group ?? 0, angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        triggers: (source.triggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, targetType: item.targetType ?? 'group', targetGroup: item.targetGroup ?? 0, color: item.color ?? '#ff5c6c', angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        invisibleTriggers: (source.invisibleTriggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, targetType: item.targetType ?? 'group', targetGroup: item.targetGroup ?? 0, deactivate: Boolean(item.deactivate), angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        pulseTriggers: (source.pulseTriggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, targetGroup: item.targetGroup ?? 0, speed: item.speed ?? 2, mode: item.mode ?? 'outer', angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        moveTriggers: (source.moveTriggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, mode: item.mode ?? 'move', targetGroup: item.targetGroup ?? 0, direction: item.direction ?? 'right', amount: item.amount ?? 4, duration: item.duration ?? 1.5, followGroup: item.followGroup ?? '0', axis: item.axis ?? 'both', angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        routePointers: (source.routePointers ?? []).map((item) => ({ ...item, group: item.group ?? 0, number: Math.max(1, Number.parseInt(String(item.number ?? '1'), 10) || 1), duration: Math.max(0.1, Number.parseFloat(String(item.duration ?? '1')) || 1), angle: item.angle ?? 0, layer: normalizeLayer(item.layer) })),
+        routeTriggers: (source.routeTriggers ?? []).map((item) => ({ ...item, group: item.group ?? 0, targetGroup: item.targetGroup ?? 0, startNumber: Math.max(1, Number.parseInt(String(item.startNumber ?? '1'), 10) || 1), endNumber: Math.max(1, Number.parseInt(String(item.endNumber ?? '1'), 10) || 1), angle: item.angle ?? 0, layer: normalizeLayer(item.layer) }))
       };
     }
 
@@ -2414,6 +3615,26 @@
     function applyEditorLevelMeta() {
       levelMusicSelect.value = editorLevel.musicId ?? 'pulse-run';
       levelNameInput.value = editorLevel.name ?? 'Новый уровень';
+      levelBackgroundInput.value = editorLevel.backgroundColor ?? '#0c2c47';
+    }
+
+    function openEditorPauseMenu() {
+      editorPauseModal.classList.add('open');
+    }
+
+    function closeEditorPauseMenu() {
+      editorPauseModal.classList.remove('open');
+    }
+
+    function openLevelSaveMenu() {
+      levelNameInput.value = editorLevel.name ?? 'Новый уровень';
+      levelSaveModal.classList.add('open');
+      levelNameInput.focus();
+      levelNameInput.select();
+    }
+
+    function closeLevelSaveMenu() {
+      levelSaveModal.classList.remove('open');
     }
 
     function readSavedLevels() {
@@ -2615,7 +3836,7 @@
         const card = document.createElement('div');
         card.className = `skin-card${unlocked ? '' : ' locked'}${profile.selectedSkin === skin.id && unlocked ? ' active' : ''}`;
         card.innerHTML = `
-          <div class="skin-preview" style="background: linear-gradient(135deg, ${skin.colors[0]}, ${skin.colors[1]});"></div>
+          <div class="skin-preview" data-skin="${skin.id}" style="background: linear-gradient(135deg, ${skin.colors[0]}, ${skin.colors[1]});"></div>
           <h4>${skin.name}</h4>
           <p>${unlocked ? 'Открыто' : `Нужно: ${skin.unlockText}`}</p>
         `;
@@ -3257,6 +4478,7 @@
 
       if (name === 'editor') {
         applyEditorLevelMeta();
+        syncEditorLayerUi();
         syncEditorMobileScale();
         syncEditorScroll();
         drawEditor();
@@ -3274,11 +4496,14 @@
       clearTimeout(restartTimer);
       clearTimeout(winSequenceTimer);
       activeGroupColors = {};
+      activeGroupVisibility = {};
+      activePlayerHidden = false;
       activatedTriggers = new Set();
       activatedDynamicBlocks = new Set();
       activePulses = {};
       activeGroupOffsets = {};
       activeMoveAnimations = {};
+      activeRouteAnimations = {};
       gameState = makePlayer();
       gameState.finishAnimation = false;
       gameState.finishPull = 0;
@@ -3315,6 +4540,7 @@
       const delta = Math.min((now - lastFrame) / 16.666, 1.3);
       lastFrame = now;
       updateMoveAnimations(now);
+      updateRouteAnimations(now);
       updateGame(delta);
       drawGame();
       animationId = requestAnimationFrame(gameLoop);
@@ -3356,6 +4582,10 @@
       return activeGroupOffsets[group] ?? { x: 0, y: 0 };
     }
 
+    function isGroupVisible(group) {
+      return !activeGroupVisibility[Math.max(0, Number.parseInt(String(group ?? '0'), 10) || 0)];
+    }
+
     function transformedPosition(item) {
       const offset = groupOffset(item.group ?? 0);
       return {
@@ -3372,9 +4602,13 @@
         ...level.bounces.filter((item) => item.group === group),
         ...((level.gravityOrbs ?? []).filter((item) => item.group === group)),
         ...level.spikes.filter((item) => item.group === group),
+        ...((level.saws ?? []).filter((item) => item.group === group)),
         ...level.triggers.filter((item) => item.group === group),
+        ...((level.invisibleTriggers ?? []).filter((item) => item.group === group)),
         ...level.pulseTriggers.filter((item) => item.group === group),
         ...level.moveTriggers.filter((item) => item.group === group),
+        ...((level.routePointers ?? []).filter((item) => item.group === group)),
+        ...((level.routeTriggers ?? []).filter((item) => item.group === group)),
         ...(level.start.group === group ? [level.start] : []),
         ...(level.finish.group === group ? [level.finish] : [])
       ];
@@ -3388,9 +4622,13 @@
         ...level.bounces.filter((item) => item.group === group).map((item) => ({ kind: 'bounce', ref: item })),
         ...(level.gravityOrbs ?? []).filter((item) => item.group === group).map((item) => ({ kind: 'gravityOrb', ref: item })),
         ...level.spikes.filter((item) => item.group === group).map((item) => ({ kind: 'spike', ref: item })),
+        ...(level.saws ?? []).filter((item) => item.group === group).map((item) => ({ kind: 'saw', ref: item })),
         ...level.triggers.filter((item) => item.group === group).map((item) => ({ kind: 'trigger', ref: item })),
+        ...(level.invisibleTriggers ?? []).filter((item) => item.group === group).map((item) => ({ kind: 'invisibleTrigger', ref: item })),
         ...level.pulseTriggers.filter((item) => item.group === group).map((item) => ({ kind: 'pulse', ref: item })),
         ...level.moveTriggers.filter((item) => item.group === group).map((item) => ({ kind: 'move', ref: item })),
+        ...((level.routePointers ?? []).filter((item) => item.group === group).map((item) => ({ kind: 'routePointer', ref: item }))),
+        ...((level.routeTriggers ?? []).filter((item) => item.group === group).map((item) => ({ kind: 'routeTrigger', ref: item }))),
         ...(level.start.group === group ? [{ kind: 'start', ref: level.start }] : []),
         ...(level.finish.group === group ? [{ kind: 'finish', ref: level.finish }] : [])
       ];
@@ -3400,11 +4638,17 @@
       const pos = transformedPosition(item);
       const x = pos.x * config.tile;
       const y = pos.y * config.tile;
+      if (kind === 'block' && (item.variant ?? 'solid') === 'mini') {
+        return { x, y, w: config.tile / 2, h: config.tile / 2 };
+      }
       if (kind === 'platform') {
         return { x, y, w: config.tile, h: config.tile / 2 };
       }
       if (kind === 'bounce') {
         return { x: x + 2, y: y + config.tile / 2, w: config.tile - 4, h: config.tile / 2 - 2 };
+      }
+      if (kind === 'saw') {
+        return { x: x + 2, y: y + 2, w: config.tile - 4, h: config.tile - 4 };
       }
       return { x, y, w: config.tile, h: config.tile };
     }
@@ -3419,6 +4663,33 @@
       };
     }
 
+    function blockPlacementFromWorld(worldX, worldY, variant) {
+      if (variant === 'mini') {
+        return {
+          x: Math.floor(worldX / (config.tile / 2)) / 2,
+          y: Math.floor(worldY / (config.tile / 2)) / 2
+        };
+      }
+      return {
+        x: Math.floor(worldX / config.tile),
+        y: Math.floor(worldY / config.tile)
+      };
+    }
+
+    function blockIntersects(block, x, y, w, h) {
+      const rect = objectRect('block', block);
+      return rectsIntersect(rect.x, rect.y, rect.w, rect.h, x, y, w, h);
+    }
+
+    function anySolidBlockAtArea(x, y, w, h, exclude = null) {
+      return editorLevel.blocks.some((item) => {
+        if (item === exclude || layerOf(item) !== editorBuildLayer) {
+          return false;
+        }
+        return blockIntersects(item, x, y, w, h);
+      });
+    }
+
     function selectableEditorObjects() {
       return [
         ...editorLevel.blocks.map((item) => ({ kind: 'block', ref: item })),
@@ -3427,12 +4698,16 @@
         ...editorLevel.bounces.map((item) => ({ kind: 'bounce', ref: item })),
         ...(editorLevel.gravityOrbs ?? []).map((item) => ({ kind: 'gravityOrb', ref: item })),
         ...editorLevel.spikes.map((item) => ({ kind: 'spike', ref: item })),
+        ...(editorLevel.saws ?? []).map((item) => ({ kind: 'saw', ref: item })),
         ...editorLevel.triggers.map((item) => ({ kind: 'trigger', ref: item })),
+        ...(editorLevel.invisibleTriggers ?? []).map((item) => ({ kind: 'invisibleTrigger', ref: item })),
         ...editorLevel.pulseTriggers.map((item) => ({ kind: 'pulse', ref: item })),
         ...editorLevel.moveTriggers.map((item) => ({ kind: 'move', ref: item })),
+        ...((editorLevel.routePointers ?? []).map((item) => ({ kind: 'routePointer', ref: item }))),
+        ...((editorLevel.routeTriggers ?? []).map((item) => ({ kind: 'routeTrigger', ref: item }))),
         { kind: 'start', ref: editorLevel.start },
         { kind: 'finish', ref: editorLevel.finish }
-      ];
+      ].filter(({ ref }) => layerOf(ref) === editorBuildLayer);
     }
 
     function uniqueSelectionItems(items) {
@@ -3583,6 +4858,15 @@
         return;
       }
       activatedTriggers.add(key);
+      const targetType = trigger.targetType ?? 'group';
+      if (targetType === 'background') {
+        activeLevel.backgroundColor = trigger.color ?? '#ff5c6c';
+        return;
+      }
+      if (targetType === 'ground') {
+        activeLevel.groundColor = trigger.color ?? '#0a8ea2';
+        return;
+      }
       activeGroupColors[trigger.targetGroup] = trigger.color;
     }
 
@@ -3598,6 +4882,25 @@
       };
     }
 
+    function activateInvisibleTrigger(trigger) {
+      const key = triggerKey('invisible', trigger);
+      if (activatedTriggers.has(key)) {
+        return;
+      }
+      activatedTriggers.add(key);
+      const targetType = trigger.targetType ?? 'group';
+      if (targetType === 'player') {
+        activePlayerHidden = !trigger.deactivate;
+        return;
+      }
+      const targetGroup = Math.max(0, Number.parseInt(String(trigger.targetGroup ?? '0'), 10) || 0);
+      if (trigger.deactivate) {
+        delete activeGroupVisibility[targetGroup];
+      } else {
+        activeGroupVisibility[targetGroup] = true;
+      }
+    }
+
     function activateMoveTrigger(moveTrigger) {
       const key = triggerKey('move', moveTrigger);
       if (activatedTriggers.has(key)) {
@@ -3605,6 +4908,102 @@
       }
       activatedTriggers.add(key);
       startMoveAnimation(moveTrigger);
+    }
+
+    function snapRouteValue(value) {
+      return Math.round(value * 4) / 4;
+    }
+
+    function routePointersInRange(startNumber, endNumber) {
+      const from = Math.max(1, Number.parseInt(String(startNumber ?? '1'), 10) || 1);
+      const to = Math.max(1, Number.parseInt(String(endNumber ?? '1'), 10) || 1);
+      const min = Math.min(from, to);
+      const max = Math.max(from, to);
+      const direction = from <= to ? 1 : -1;
+      const points = (activeLevel.routePointers ?? [])
+        .filter((item) => {
+          const number = Math.max(1, Number.parseInt(String(item.number ?? '1'), 10) || 1);
+          return number >= min && number <= max;
+        })
+        .map((item) => {
+          const pos = transformedPosition(item);
+          return {
+            ref: item,
+            number: Math.max(1, Number.parseInt(String(item.number ?? '1'), 10) || 1),
+            duration: Math.max(0.1, Number.parseFloat(String(item.duration ?? '1')) || 1),
+            x: pos.x + 0.5,
+            y: pos.y + 0.5
+          };
+        })
+        .sort((a, b) => {
+          if (a.number !== b.number) {
+            return direction > 0 ? a.number - b.number : b.number - a.number;
+          }
+          if (a.ref.y !== b.ref.y) {
+            return a.ref.y - b.ref.y;
+          }
+          return a.ref.x - b.ref.x;
+        });
+      return points;
+    }
+
+    function activateRouteTrigger(routeTrigger) {
+      const key = triggerKey('route', routeTrigger);
+      if (activatedTriggers.has(key)) {
+        return;
+      }
+      activatedTriggers.add(key);
+      const targetGroup = Math.max(0, Number.parseInt(String(routeTrigger.targetGroup ?? '0'), 10) || 0);
+      if (!targetGroup) {
+        return;
+      }
+      const path = routePointersInRange(routeTrigger.startNumber, routeTrigger.endNumber);
+      if (!path.length) {
+        return;
+      }
+      const groupKey = String(targetGroup);
+      const sourceCenter = groupCenter(activeLevel, targetGroup);
+      if (!sourceCenter) {
+        return;
+      }
+      const currentOffset = groupOffset(targetGroup);
+      const legs = [];
+      let previousX = sourceCenter.x;
+      let previousY = sourceCenter.y;
+      let accumulatedX = currentOffset.x;
+      let accumulatedY = currentOffset.y;
+      path.forEach((point, index) => {
+        accumulatedX = snapRouteValue(accumulatedX + (point.x - previousX));
+        accumulatedY = snapRouteValue(accumulatedY + (point.y - previousY));
+        if (index === 0) {
+          activeGroupOffsets[groupKey] = {
+            x: accumulatedX,
+            y: accumulatedY
+          };
+        } else {
+          legs.push({
+            endX: accumulatedX,
+            endY: accumulatedY,
+            duration: Math.max(0.1, path[index - 1].duration)
+          });
+        }
+        previousX = point.x;
+        previousY = point.y;
+      });
+      if (!legs.length) {
+        delete activeRouteAnimations[groupKey];
+        return;
+      }
+      activeRouteAnimations[groupKey] = {
+        legs,
+        index: 0,
+        startX: activeGroupOffsets[groupKey]?.x ?? accumulatedX,
+        startY: activeGroupOffsets[groupKey]?.y ?? accumulatedY,
+        endX: legs[0].endX,
+        endY: legs[0].endY,
+        duration: legs[0].duration,
+        startTime: performance.now()
+      };
     }
 
     function activateTriggerGroup(group) {
@@ -3617,6 +5016,11 @@
           activateColorTrigger(trigger);
         }
       });
+      (activeLevel.invisibleTriggers ?? []).forEach((trigger) => {
+        if ((trigger.group ?? 0) === safeGroup) {
+          activateInvisibleTrigger(trigger);
+        }
+      });
       activeLevel.pulseTriggers.forEach((trigger) => {
         if ((trigger.group ?? 0) === safeGroup) {
           activatePulseTrigger(trigger);
@@ -3627,10 +5031,18 @@
           activateMoveTrigger(trigger);
         }
       });
+      (activeLevel.routeTriggers ?? []).forEach((trigger) => {
+        if ((trigger.group ?? 0) === safeGroup) {
+          activateRouteTrigger(trigger);
+        }
+      });
     }
 
     function updateDynamicBlocks() {
       for (const block of activeLevel.dynamicBlocks ?? []) {
+        if (layerOf(block) !== 'front' || !isGroupVisible(block.group ?? 0)) {
+          continue;
+        }
         const touchGroup = Math.max(0, block.touchGroup ?? 0);
         const activateGroup = Math.max(0, block.activateGroup ?? 0);
         if (!touchGroup || !activateGroup) {
@@ -3643,6 +5055,9 @@
         const blockRect = objectRect('dynamicBlock', block);
         const touched = groupObjects(activeLevel, touchGroup).some(({ kind, ref }) => {
           if (ref === block) {
+            return false;
+          }
+          if (layerOf(ref) !== layerOf(block) || !isGroupVisible(ref.group ?? 0)) {
             return false;
           }
           const otherRect = objectRect(kind, ref);
@@ -3710,6 +5125,33 @@
       });
     }
 
+    function updateRouteAnimations(now) {
+      Object.entries(activeRouteAnimations).forEach(([groupKey, animation]) => {
+        const durationMs = Math.max(100, animation.duration * 1000);
+        const t = Math.max(0, Math.min(1, (now - animation.startTime) / durationMs));
+        const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        activeGroupOffsets[groupKey] = {
+          x: animation.startX + (animation.endX - animation.startX) * eased,
+          y: animation.startY + (animation.endY - animation.startY) * eased
+        };
+        if (t >= 1) {
+          activeGroupOffsets[groupKey] = { x: animation.endX, y: animation.endY };
+          animation.index += 1;
+          const nextLeg = animation.legs[animation.index];
+          if (!nextLeg) {
+            delete activeRouteAnimations[groupKey];
+            return;
+          }
+          animation.startX = activeGroupOffsets[groupKey].x;
+          animation.startY = activeGroupOffsets[groupKey].y;
+          animation.endX = nextLeg.endX;
+          animation.endY = nextLeg.endY;
+          animation.duration = nextLeg.duration;
+          animation.startTime = now;
+        }
+      });
+    }
+
     function startMoveAnimation(configMove) {
       const targetGroup = Math.max(0, configMove.targetGroup ?? 0);
       if (!targetGroup) {
@@ -3767,6 +5209,9 @@
 
     function tryActivateGravityOrb() {
       for (const orb of activeLevel.gravityOrbs ?? []) {
+        if (layerOf(orb) !== 'front' || !isGroupVisible(orb.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(orb);
         const orbX = pos.x * config.tile;
         const orbY = pos.y * config.tile;
@@ -3829,17 +5274,18 @@
       }
 
       for (const block of activeLevel.blocks) {
-        const pos = transformedPosition(block);
-        const tileX = pos.x * config.tile;
-        const tileY = pos.y * config.tile;
-        if (rectsIntersect(gameState.x, gameState.y, gameState.size, gameState.size, tileX, tileY, config.tile, config.tile)) {
-          if (gameState.gravityDir > 0 && gameState.vy >= 0 && previousY + gameState.size <= tileY + 6) {
-            gameState.y = tileY - gameState.size;
+        if (layerOf(block) !== 'front' || !isGroupVisible(block.group ?? 0)) {
+          continue;
+        }
+        const rect = objectRect('block', block);
+        if (rectsIntersect(gameState.x, gameState.y, gameState.size, gameState.size, rect.x, rect.y, rect.w, rect.h)) {
+          if (gameState.gravityDir > 0 && gameState.vy >= 0 && previousY + gameState.size <= rect.y + 6) {
+            gameState.y = rect.y - gameState.size;
             gameState.vy = 0;
             gameState.grounded = true;
             gameState.rotation = 0;
-          } else if (gameState.gravityDir < 0 && gameState.vy <= 0 && previousY >= tileY + config.tile - 6) {
-            gameState.y = tileY + config.tile;
+          } else if (gameState.gravityDir < 0 && gameState.vy <= 0 && previousY >= rect.y + rect.h - 6) {
+            gameState.y = rect.y + rect.h;
             gameState.vy = 0;
             gameState.grounded = true;
             gameState.rotation = 0;
@@ -3851,6 +5297,9 @@
       }
 
       for (const block of activeLevel.dynamicBlocks ?? []) {
+        if (layerOf(block) !== 'front' || !isGroupVisible(block.group ?? 0)) {
+          continue;
+        }
         if (!block.touchable) {
           continue;
         }
@@ -3876,6 +5325,9 @@
       }
 
       for (const platform of activeLevel.platforms) {
+        if (layerOf(platform) !== 'front' || !isGroupVisible(platform.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(platform);
         const tileX = pos.x * config.tile;
         const tileY = pos.y * config.tile;
@@ -3896,6 +5348,9 @@
       }
 
       for (const bounce of activeLevel.bounces) {
+        if (layerOf(bounce) !== 'front' || !isGroupVisible(bounce.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(bounce);
         const tileX = pos.x * config.tile;
         const tileY = pos.y * config.tile;
@@ -3914,6 +5369,9 @@
       }
 
       for (const spike of activeLevel.spikes) {
+        if (layerOf(spike) !== 'front' || !isGroupVisible(spike.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(spike);
         const spikeX = pos.x * config.tile;
         const spikeY = pos.y * config.tile;
@@ -3923,7 +5381,27 @@
         }
       }
 
+      for (const saw of activeLevel.saws) {
+        if (layerOf(saw) !== 'front' || !isGroupVisible(saw.group ?? 0)) {
+          continue;
+        }
+        const pos = transformedPosition(saw);
+        const centerX = pos.x * config.tile + config.tile / 2;
+        const centerY = pos.y * config.tile + config.tile / 2;
+        const closestX = Math.max(gameState.x, Math.min(centerX, gameState.x + gameState.size));
+        const closestY = Math.max(gameState.y, Math.min(centerY, gameState.y + gameState.size));
+        const dx = centerX - closestX;
+        const dy = centerY - closestY;
+        if ((dx * dx) + (dy * dy) <= 10.5 * 10.5) {
+          failRun();
+          return;
+        }
+      }
+
       for (const trigger of activeLevel.triggers) {
+        if (layerOf(trigger) !== 'front' || !isGroupVisible(trigger.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(trigger);
         const triggerX = pos.x * config.tile;
         const triggerY = pos.y * config.tile;
@@ -3932,7 +5410,22 @@
         }
       }
 
+      for (const trigger of activeLevel.invisibleTriggers ?? []) {
+        if (layerOf(trigger) !== 'front' || !isGroupVisible(trigger.group ?? 0)) {
+          continue;
+        }
+        const pos = transformedPosition(trigger);
+        const triggerX = pos.x * config.tile;
+        const triggerY = pos.y * config.tile;
+        if (rectsIntersect(gameState.x, gameState.y, gameState.size, gameState.size, triggerX, triggerY, config.tile, config.tile)) {
+          activateInvisibleTrigger(trigger);
+        }
+      }
+
       for (const pulseTrigger of activeLevel.pulseTriggers) {
+        if (layerOf(pulseTrigger) !== 'front' || !isGroupVisible(pulseTrigger.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(pulseTrigger);
         const pulseX = pos.x * config.tile;
         const pulseY = pos.y * config.tile;
@@ -3942,6 +5435,9 @@
       }
 
       for (const moveTrigger of activeLevel.moveTriggers) {
+        if (layerOf(moveTrigger) !== 'front' || !isGroupVisible(moveTrigger.group ?? 0)) {
+          continue;
+        }
         const pos = transformedPosition(moveTrigger);
         const moveX = pos.x * config.tile;
         const moveY = pos.y * config.tile;
@@ -3950,9 +5446,23 @@
         }
       }
 
+      for (const routeTrigger of activeLevel.routeTriggers ?? []) {
+        if (layerOf(routeTrigger) !== 'front' || !isGroupVisible(routeTrigger.group ?? 0)) {
+          continue;
+        }
+        const pos = transformedPosition(routeTrigger);
+        const routeX = pos.x * config.tile;
+        const routeY = pos.y * config.tile;
+        if (rectsIntersect(gameState.x, gameState.y, gameState.size, gameState.size, routeX, routeY, config.tile, config.tile)) {
+          activateRouteTrigger(routeTrigger);
+        }
+      }
+
       const finishWall = finishWallRect();
-      if (rectsIntersect(gameState.x, gameState.y, gameState.size, gameState.size, finishWall.x, finishWall.y, finishWall.w, finishWall.h)
-        || gameState.x + gameState.size >= finishWall.x - 12) {
+      if (isGroupVisible(activeLevel.finish.group ?? 0) && (
+        rectsIntersect(gameState.x, gameState.y, gameState.size, gameState.size, finishWall.x, finishWall.y, finishWall.w, finishWall.h)
+        || gameState.x + gameState.size >= finishWall.x - 12
+      )) {
         beginWinSequence();
         return;
       }
@@ -4085,22 +5595,50 @@
       drawGround(gameCtx);
       gameCtx.save();
       gameCtx.translate(-cameraX, 0);
-      activeLevel.blocks.forEach((block) => drawBlock(gameCtx, block));
-      activeLevel.dynamicBlocks.forEach((block) => drawDynamicBlock(gameCtx, block));
-      activeLevel.platforms.forEach((platform) => drawPlatform(gameCtx, platform));
-      activeLevel.bounces.forEach((bounce) => drawBounce(gameCtx, bounce));
-      activeLevel.gravityOrbs.forEach((orb) => drawGravityOrb(gameCtx, orb));
-      activeLevel.spikes.forEach((spike) => drawSpike(gameCtx, spike));
+      drawRoutePointerPath(gameCtx, activeLevel, 'back');
+      activeLevel.blocks.filter((item) => layerOf(item) === 'back').forEach((block) => drawBlock(gameCtx, block));
+      activeLevel.dynamicBlocks.filter((item) => layerOf(item) === 'back').forEach((block) => drawDynamicBlock(gameCtx, block));
+      activeLevel.platforms.filter((item) => layerOf(item) === 'back').forEach((platform) => drawPlatform(gameCtx, platform));
+      activeLevel.bounces.filter((item) => layerOf(item) === 'back').forEach((bounce) => drawBounce(gameCtx, bounce));
+      activeLevel.gravityOrbs.filter((item) => layerOf(item) === 'back').forEach((orb) => drawGravityOrb(gameCtx, orb));
+      activeLevel.spikes.filter((item) => layerOf(item) === 'back').forEach((spike) => drawSpike(gameCtx, spike));
+      activeLevel.saws.filter((item) => layerOf(item) === 'back').forEach((saw) => drawSaw(gameCtx, saw));
+      (activeLevel.routePointers ?? []).filter((item) => layerOf(item) === 'back').forEach((pointer) => drawRoutePointerMarker(gameCtx, pointer));
+      drawRoutePointerPath(gameCtx, activeLevel, 'front');
+      activeLevel.blocks.filter((item) => layerOf(item) === 'front').forEach((block) => drawBlock(gameCtx, block));
+      activeLevel.dynamicBlocks.filter((item) => layerOf(item) === 'front').forEach((block) => drawDynamicBlock(gameCtx, block));
+      activeLevel.platforms.filter((item) => layerOf(item) === 'front').forEach((platform) => drawPlatform(gameCtx, platform));
+      activeLevel.bounces.filter((item) => layerOf(item) === 'front').forEach((bounce) => drawBounce(gameCtx, bounce));
+      activeLevel.gravityOrbs.filter((item) => layerOf(item) === 'front').forEach((orb) => drawGravityOrb(gameCtx, orb));
+      activeLevel.spikes.filter((item) => layerOf(item) === 'front').forEach((spike) => drawSpike(gameCtx, spike));
+      activeLevel.saws.filter((item) => layerOf(item) === 'front').forEach((saw) => drawSaw(gameCtx, saw));
+      (activeLevel.routePointers ?? []).filter((item) => layerOf(item) === 'front').forEach((pointer) => drawRoutePointerMarker(gameCtx, pointer));
       drawStartMarker(gameCtx, activeLevel.start);
       drawFinishWall(gameCtx, activeLevel.finish);
       drawPlayer();
       gameCtx.restore();
     }
 
+    function currentLevelBackgroundColor() {
+      if (screens.editor.classList.contains('active')) {
+        return editorLevel?.backgroundColor ?? '#0c2c47';
+      }
+      return activeLevel?.backgroundColor ?? '#0c2c47';
+    }
+
+    function currentLevelGroundColor() {
+      if (screens.editor.classList.contains('active')) {
+        return editorLevel?.groundColor ?? '#0a8ea2';
+      }
+      return activeLevel?.groundColor ?? '#0a8ea2';
+    }
+
     function drawBackground(ctx, canvas, cameraX = 0) {
+      const topColor = currentLevelBackgroundColor();
+      const bottomColor = lighten(topColor, -0.74);
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#0c2c47');
-      gradient.addColorStop(1, '#04111a');
+      gradient.addColorStop(0, topColor);
+      gradient.addColorStop(1, bottomColor);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -4127,13 +5665,37 @@
         ctx.lineTo(canvas.width, y);
         ctx.stroke();
       }
+      if (ctx === editorCtx && selectedTool === 'miniBlock') {
+        ctx.strokeStyle = 'rgba(57, 243, 210, 0.22)';
+        const half = config.tile / 2;
+        const halfOffset = ((cameraX % half) + half) % half;
+        for (let x = -halfOffset; x <= canvas.width; x += half) {
+          if (Math.abs((x + halfOffset) % config.tile) < 0.001) {
+            continue;
+          }
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = half; y <= canvas.height; y += half) {
+          if (y % config.tile === 0) {
+            continue;
+          }
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+      }
     }
 
     function drawGround(ctx, width = gameCanvas.width, height = gameCanvas.height) {
       const y = groundY();
-      ctx.fillStyle = '#0a8ea2';
+      const groundColor = currentLevelGroundColor();
+      ctx.fillStyle = groundColor;
       ctx.fillRect(0, y, width, height - y);
-      ctx.fillStyle = '#12b6c9';
+      ctx.fillStyle = lighten(groundColor, 0.26);
       ctx.fillRect(0, y, width, 8);
     }
 
@@ -4143,8 +5705,13 @@
       const r = (value >> 16) & 255;
       const g = (value >> 8) & 255;
       const b = value & 255;
-      const lift = (channel) => Math.min(255, Math.round(channel + (255 - channel) * amount));
-      return `rgb(${lift(r)}, ${lift(g)}, ${lift(b)})`;
+      const adjust = (channel) => {
+        if (amount >= 0) {
+          return Math.min(255, Math.round(channel + (255 - channel) * amount));
+        }
+        return Math.max(0, Math.round(channel * (1 + amount)));
+      };
+      return `rgb(${adjust(r)}, ${adjust(g)}, ${adjust(b)})`;
     }
 
     function resolveObjectColors(group, fallbackA, fallbackB = fallbackA) {
@@ -4180,7 +5747,15 @@
     }
 
     function withObjectTransform(ctx, item, centerX, centerY, drawFn) {
+      if (ctx === gameCtx && !isGroupVisible(item?.group ?? 0)) {
+        return;
+      }
       const angle = normalizeAngle(item?.angle ?? 0);
+      ctx.save();
+      if (layerOf(item) === 'back') {
+        ctx.globalAlpha *= ctx === editorCtx ? 0.42 : 0.34;
+        ctx.filter = 'brightness(0.58) saturate(0.82)';
+      }
       withPulse(ctx, item?.group ?? 0, centerX, centerY, () => {
         if (!angle) {
           drawFn();
@@ -4193,6 +5768,7 @@
         drawFn();
         ctx.restore();
       });
+      ctx.restore();
     }
 
     function drawBadge(ctx, x, y, text, fill = 'rgba(5, 19, 31, 0.82)') {
@@ -4214,8 +5790,19 @@
       const px = pos.x * config.tile;
       const py = pos.y * config.tile;
       const variant = block.variant ?? 'solid';
-      withObjectTransform(ctx, block, px + config.tile / 2, py + config.tile / 2, () => {
-        if (variant === 'brick') {
+      const blockWidth = variant === 'mini' ? config.tile / 2 : config.tile;
+      const blockHeight = variant === 'mini' ? config.tile / 2 : config.tile;
+      withObjectTransform(ctx, block, px + blockWidth / 2, py + blockHeight / 2, () => {
+        if (variant === 'mini') {
+          const [colorA, colorB] = resolveObjectColors(block.group, '#ff9966', '#f04b43');
+          const gradient = ctx.createLinearGradient(px, py, px + blockWidth, py + blockHeight);
+          gradient.addColorStop(0, colorA);
+          gradient.addColorStop(1, colorB);
+          ctx.fillStyle = gradient;
+          ctx.fillRect(px, py, blockWidth, blockHeight);
+          ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+          ctx.strokeRect(px + 1, py + 1, blockWidth - 2, blockHeight - 2);
+        } else if (variant === 'brick') {
           const [colorA, colorB] = resolveObjectColors(block.group, '#d98a61', '#9f472f');
           const gradient = ctx.createLinearGradient(px, py, px + config.tile, py + config.tile);
           gradient.addColorStop(0, colorA);
@@ -4403,6 +5990,53 @@
       }
     }
 
+    function drawSaw(ctx, saw) {
+      const pos = transformedPosition(saw);
+      const px = pos.x * config.tile;
+      const py = pos.y * config.tile;
+      const centerX = px + config.tile / 2;
+      const centerY = py + config.tile / 2;
+      const baseAngle = ((performance.now() * 0.22) + (saw.angle ?? 0) * 12) * Math.PI / 180;
+      const [colorA, colorB] = resolveObjectColors(saw.group, '#f5fdff', '#8fe3ff');
+      withObjectTransform(ctx, saw, centerX, centerY, () => {
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(baseAngle);
+        ctx.beginPath();
+        for (let tooth = 0; tooth < 16; tooth += 1) {
+          const angle = tooth / 16 * Math.PI * 2;
+          const radius = tooth % 2 === 0 ? 11 : 7;
+          const pointX = Math.cos(angle) * radius;
+          const pointY = Math.sin(angle) * radius;
+          if (tooth === 0) {
+            ctx.moveTo(pointX, pointY);
+          } else {
+            ctx.lineTo(pointX, pointY);
+          }
+        }
+        ctx.closePath();
+        const gradient = ctx.createRadialGradient(-3, -4, 2, 0, 0, 12);
+        gradient.addColorStop(0, colorA);
+        gradient.addColorStop(1, colorB);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.strokeStyle = '#eaffff';
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, 0, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(7, 24, 40, 0.9)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+      });
+      if (saw.group > 0) {
+        drawBadge(ctx, px + 5, py + 10, saw.group);
+      }
+    }
+
     function drawStartMarker(ctx, start) {
       const pos = transformedPosition(start);
       const px = pos.x * config.tile;
@@ -4447,6 +6081,9 @@
     }
 
     function drawFinishWall(ctx, finish) {
+      if (ctx === gameCtx && !isGroupVisible(finish.group ?? 0)) {
+        return;
+      }
       const pos = transformedPosition(finish);
       const px = pos.x * config.tile;
       const wallX = px - 6;
@@ -4491,6 +6128,7 @@
       const px = pos.x * config.tile;
       const py = pos.y * config.tile;
       const isActive = activatedTriggers.has(triggerKey('color', trigger));
+      const targetType = trigger.targetType ?? 'group';
       withObjectTransform(ctx, trigger, px + 12, py + 12, () => {
         ctx.beginPath();
         ctx.arc(px + 12, py + 12, 9, 0, Math.PI * 2);
@@ -4501,9 +6139,45 @@
         ctx.stroke();
         ctx.lineWidth = 1;
       });
-      drawBadge(ctx, px + 7, py + 8, trigger.targetGroup, 'rgba(5, 19, 31, 0.9)');
+      drawBadge(ctx, px + 7, py + 8, targetType === 'group' ? trigger.targetGroup : targetType === 'background' ? 'BG' : 'FL', 'rgba(5, 19, 31, 0.9)');
       if ((trigger.group ?? 0) > 0) {
         drawBadge(ctx, px, py, trigger.group, 'rgba(72, 28, 12, 0.88)');
+      }
+    }
+
+    function drawInvisibleTriggerMarker(ctx, trigger) {
+      const pos = transformedPosition(trigger);
+      const px = pos.x * config.tile;
+      const py = pos.y * config.tile;
+      const isActive = activatedTriggers.has(triggerKey('invisible', trigger));
+      const targetType = trigger.targetType ?? 'group';
+      withObjectTransform(ctx, trigger, px + 12, py + 12, () => {
+        ctx.beginPath();
+        ctx.arc(px + 12, py + 12, 9, 0, Math.PI * 2);
+        ctx.fillStyle = isActive ? '#ffd78d' : '#736d63';
+        ctx.fill();
+        ctx.strokeStyle = trigger.deactivate ? '#7dff9c' : '#fff2a8';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(px + 8, py + 8);
+        ctx.lineTo(px + 16, py + 16);
+        ctx.strokeStyle = '#0b1c2b';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        if (trigger.deactivate) {
+          ctx.beginPath();
+          ctx.moveTo(px + 15, py + 8);
+          ctx.lineTo(px + 9, py + 16);
+          ctx.strokeStyle = '#7dff9c';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+        ctx.lineWidth = 1;
+      });
+      drawBadge(ctx, px + 7, py + 8, targetType === 'player' ? 'PL' : trigger.targetGroup, 'rgba(5, 19, 31, 0.9)');
+      if ((trigger.group ?? 0) > 0) {
+        drawBadge(ctx, px, py, trigger.group, 'rgba(45, 38, 20, 0.88)');
       }
     }
 
@@ -4551,7 +6225,101 @@
       }
     }
 
+    function drawRoutePointerPath(ctx, level, layer) {
+      const points = (level.routePointers ?? [])
+        .filter((item) => layerOf(item) === layer)
+        .map((item) => {
+          const pos = transformedPosition(item);
+          return {
+            ref: item,
+            number: Math.max(1, Number.parseInt(String(item.number ?? '1'), 10) || 1),
+            x: pos.x * config.tile + config.tile / 2,
+            y: pos.y * config.tile + config.tile / 2
+          };
+        })
+        .sort((a, b) => a.number - b.number || a.ref.y - b.ref.y || a.ref.x - b.ref.x);
+      if (points.length < 2) {
+        return;
+      }
+      ctx.save();
+      ctx.setLineDash([8, 6]);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = layer === 'back' ? 'rgba(127, 215, 255, 0.3)' : 'rgba(127, 215, 255, 0.75)';
+      ctx.fillStyle = layer === 'back' ? 'rgba(191, 246, 255, 0.45)' : 'rgba(191, 246, 255, 0.9)';
+      for (let i = 0; i < points.length - 1; i += 1) {
+        const a = points[i];
+        const b = points[i + 1];
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+        const angle = Math.atan2(b.y - a.y, b.x - a.x);
+        const arrowX = b.x - Math.cos(angle) * 10;
+        const arrowY = b.y - Math.sin(angle) * 10;
+        ctx.beginPath();
+        ctx.moveTo(arrowX, arrowY);
+        ctx.lineTo(arrowX - Math.cos(angle - Math.PI / 6) * 8, arrowY - Math.sin(angle - Math.PI / 6) * 8);
+        ctx.lineTo(arrowX - Math.cos(angle + Math.PI / 6) * 8, arrowY - Math.sin(angle + Math.PI / 6) * 8);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawRoutePointerMarker(ctx, pointer) {
+      const pos = transformedPosition(pointer);
+      const px = pos.x * config.tile;
+      const py = pos.y * config.tile;
+      withObjectTransform(ctx, pointer, px + 12, py + 12, () => {
+        ctx.fillStyle = '#4dc6ff';
+        ctx.beginPath();
+        ctx.moveTo(px + 5, py + 12);
+        ctx.lineTo(px + 15, py + 12);
+        ctx.lineTo(px + 15, py + 8);
+        ctx.lineTo(px + 22, py + 12);
+        ctx.lineTo(px + 15, py + 16);
+        ctx.lineTo(px + 15, py + 12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#e6fbff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.lineWidth = 1;
+      });
+      drawBadge(ctx, px + 6, py + 2, pointer.number ?? 1, 'rgba(5, 19, 31, 0.9)');
+      drawBadge(ctx, px + 2, py + 15, `${(pointer.duration ?? 1).toFixed(1)}s`, 'rgba(15, 56, 86, 0.92)');
+      if ((pointer.group ?? 0) > 0) {
+        drawBadge(ctx, px, py, pointer.group, 'rgba(10, 44, 66, 0.88)');
+      }
+    }
+
+    function drawRouteTriggerMarker(ctx, trigger) {
+      const pos = transformedPosition(trigger);
+      const px = pos.x * config.tile;
+      const py = pos.y * config.tile;
+      const isActive = activatedTriggers.has(`route:${trigger.x}:${trigger.y}`);
+      withObjectTransform(ctx, trigger, px + 12, py + 12, () => {
+        ctx.fillStyle = isActive ? '#ffe48f' : '#ffbf47';
+        ctx.fillRect(px + 4, py + 10, 10, 4);
+        ctx.beginPath();
+        ctx.moveTo(px + 13, py + 6);
+        ctx.lineTo(px + 22, py + 12);
+        ctx.lineTo(px + 13, py + 18);
+        ctx.lineTo(px + 16, py + 12);
+        ctx.closePath();
+        ctx.fill();
+      });
+      drawBadge(ctx, px + 4, py + 2, `${trigger.startNumber ?? 1}-${trigger.endNumber ?? 1}`, 'rgba(5, 19, 31, 0.9)');
+      drawBadge(ctx, px + 7, py + 15, trigger.targetGroup ?? 0, 'rgba(72, 42, 8, 0.9)');
+      if ((trigger.group ?? 0) > 0) {
+        drawBadge(ctx, px, py, trigger.group, 'rgba(45, 30, 10, 0.88)');
+      }
+    }
+
     function drawPlayer() {
+      if (activePlayerHidden && !gameState.finishAnimation) {
+        return;
+      }
       gameCtx.save();
       gameCtx.translate(gameState.x + gameState.size / 2, gameState.y + gameState.size / 2);
       gameCtx.rotate(gameState.rotation);
@@ -4635,6 +6403,683 @@
       gameCtx.restore();
     }
 
+    function drawTutorialCube(ctx, x, y, size, skinId = 'starter', rotation = 0) {
+      ctx.save();
+      ctx.translate(x + size / 2, y + size / 2);
+      ctx.rotate(rotation);
+      const [colorA, colorB] = skinPalette(skinId);
+      const gradient = ctx.createLinearGradient(-size / 2, -size / 2, size / 2, size / 2);
+      gradient.addColorStop(0, colorA);
+      gradient.addColorStop(1, colorB);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(-size / 2, -size / 2, size, size);
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.4;
+      ctx.strokeRect(-size / 2 + 1, -size / 2 + 1, size - 2, size - 2);
+      ctx.fillStyle = '#0c3155';
+      if (skinId === 'pulse') {
+        ctx.beginPath();
+        ctx.moveTo(-size * 0.28, 0);
+        ctx.lineTo(-size * 0.08, -size * 0.24);
+        ctx.lineTo(size * 0.08, size * 0.24);
+        ctx.lineTo(size * 0.28, 0);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      } else if (skinId === 'tester') {
+        ctx.fillRect(-size * 0.28, -size * 0.28, size * 0.56, size * 0.56);
+        ctx.clearRect(-size * 0.14, -size * 0.14, size * 0.28, size * 0.28);
+      } else if (skinId === 'gravity') {
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.24, Math.PI * 0.2, Math.PI * 1.7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(size * 0.04, -size * 0.26);
+        ctx.lineTo(size * 0.21, -size * 0.08);
+        ctx.lineTo(0, -size * 0.08);
+        ctx.closePath();
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+      } else {
+        ctx.fillRect(-size * 0.28, size * 0.18, size * 0.56, size * 0.16);
+      }
+      ctx.restore();
+    }
+
+    function drawTutorialBackground(ctx, width, height, editorMode = false) {
+      const gradient = ctx.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(0, '#1f6d93');
+      gradient.addColorStop(1, '#061827');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+      for (let i = 0; i < 10; i += 1) {
+        ctx.fillStyle = `rgba(57, 243, 210, ${0.05 + i * 0.012})`;
+        ctx.fillRect(20 + i * 34, 12 + (i % 2) * 18, 18, 18);
+      }
+      if (editorMode) {
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= width; x += 24) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+        for (let y = 0; y <= height; y += 24) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+      } else {
+        ctx.fillStyle = '#0a8ea2';
+        ctx.fillRect(0, height - 24, width, 24);
+        ctx.fillStyle = '#12b6c9';
+        ctx.fillRect(0, height - 24, width, 8);
+      }
+    }
+
+    function drawTutorialBlock(ctx, x, y, size, colorA = '#ff9966', colorB = '#f04b43', alpha = 1) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
+      gradient.addColorStop(0, colorA);
+      gradient.addColorStop(1, colorB);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x, y, size, size);
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.strokeRect(x + 1, y + 1, size - 2, size - 2);
+      ctx.restore();
+    }
+
+    function drawTutorialSpike(ctx, x, y, size) {
+      ctx.beginPath();
+      ctx.moveTo(x, y + size);
+      ctx.lineTo(x + size / 2, y);
+      ctx.lineTo(x + size, y + size);
+      ctx.closePath();
+      const gradient = ctx.createLinearGradient(x, y, x, y + size);
+      gradient.addColorStop(0, '#ffffff');
+      gradient.addColorStop(1, '#ff9da7');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.stroke();
+    }
+
+    function drawTutorialSaw(ctx, x, y, radius) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.beginPath();
+      for (let i = 0; i < 12; i += 1) {
+        const angle = i / 12 * Math.PI * 2;
+        const outer = i % 2 === 0 ? radius : radius * 0.62;
+        const px = Math.cos(angle) * outer;
+        const py = Math.sin(angle) * outer;
+        if (i === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.closePath();
+      const gradient = ctx.createLinearGradient(-radius, -radius, radius, radius);
+      gradient.addColorStop(0, '#fefefe');
+      gradient.addColorStop(1, '#86d9ff');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(234,255,255,0.9)';
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.34, 0, Math.PI * 2);
+      ctx.fillStyle = '#0b2236';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawTutorialArrow(ctx, x, y, color = '#ffbf47') {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x, y + 8);
+      ctx.lineTo(x + 18, y + 8);
+      ctx.lineTo(x + 18, y + 2);
+      ctx.lineTo(x + 30, y + 14);
+      ctx.lineTo(x + 18, y + 26);
+      ctx.lineTo(x + 18, y + 20);
+      ctx.lineTo(x, y + 20);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawTutorialHudPill(ctx, x, y, w, h, fill = 'rgba(5, 18, 31, 0.72)', stroke = 'rgba(255,255,255,0.12)') {
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 12);
+      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.stroke();
+    }
+
+    function drawTutorialButton(ctx, x, y, w, h, label, variant = 'dark') {
+      let fill = 'rgba(17, 33, 48, 0.92)';
+      let stroke = 'rgba(255,255,255,0.12)';
+      let text = '#effcff';
+      if (variant === 'primary') {
+        fill = '#ffbf47';
+        stroke = 'rgba(255,245,210,0.34)';
+        text = '#091521';
+      } else if (variant === 'secondary') {
+        fill = '#2b8dbe';
+        stroke = 'rgba(157,226,255,0.22)';
+        text = '#effcff';
+      }
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 11);
+      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.stroke();
+      ctx.fillStyle = text;
+      ctx.font = '700 11px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, x + w / 2, y + h / 2 + 0.5);
+    }
+
+    function drawTutorialLine(ctx, x, y, w, h = 8, color = '#9fc4d8', alpha = 1) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 5);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawTutorialPanel(ctx, x, y, w, h, fill = 'rgba(5, 18, 31, 0.8)', stroke = 'rgba(132,220,255,0.16)') {
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 16);
+      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.stroke();
+    }
+
+    function drawTutorialCheck(ctx, x, y, color = '#8effc9') {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x, y + 8);
+      ctx.lineTo(x + 8, y + 16);
+      ctx.lineTo(x + 22, y);
+      ctx.stroke();
+      ctx.lineCap = 'butt';
+    }
+
+    function drawTutorialTitleText(ctx, x, y, text) {
+      ctx.save();
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.font = '900 26px Trebuchet MS, Verdana, sans-serif';
+      ctx.fillStyle = '#effcff';
+      ctx.shadowColor = 'rgba(255, 191, 71, 0.32)';
+      ctx.shadowBlur = 14;
+      const lines = String(text).split('\n');
+      lines.forEach((line, index) => {
+        ctx.fillText(line, x, y + index * 24);
+      });
+      ctx.restore();
+    }
+
+    function drawTutorialMenuTileIcon(ctx, x, y, size, kind, primary = false) {
+      ctx.save();
+      ctx.fillStyle = primary ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.24)';
+      ctx.strokeStyle = primary ? 'rgba(3,20,29,0.16)' : 'rgba(255,255,255,0.28)';
+      ctx.beginPath();
+      ctx.roundRect(x, y, size, size, 14);
+      ctx.fill();
+      ctx.stroke();
+      if (kind === 'play') {
+        const grad = ctx.createLinearGradient(x + size * 0.3, y + size * 0.25, x + size * 0.75, y + size * 0.75);
+        grad.addColorStop(0, '#04131d');
+        grad.addColorStop(1, '#177aa1');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(x + size * 0.38, y + size * 0.28);
+        ctx.lineTo(x + size * 0.72, y + size * 0.5);
+        ctx.lineTo(x + size * 0.38, y + size * 0.72);
+        ctx.closePath();
+        ctx.fill();
+      } else if (kind === 'tools') {
+        const grad = ctx.createLinearGradient(x, y, x + size, y + size);
+        grad.addColorStop(0, '#d9fff6');
+        grad.addColorStop(1, '#50d7ff');
+        ctx.fillStyle = grad;
+        ctx.save();
+        ctx.translate(x + size * 0.5, y + size * 0.5);
+        ctx.rotate(Math.PI / 4);
+        ctx.beginPath();
+        ctx.roundRect(-size * 0.28, -size * 0.06, size * 0.56, size * 0.12, 99);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.roundRect(-size * 0.06, -size * 0.28, size * 0.12, size * 0.56, 8);
+        ctx.fill();
+        ctx.restore();
+      } else if (kind === 'files') {
+        const grad = ctx.createLinearGradient(x, y, x + size, y + size);
+        grad.addColorStop(0, '#fff1bf');
+        grad.addColorStop(1, '#ffbf47');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(x + size * 0.26, y + size * 0.16, size * 0.48, size * 0.6, 8);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(3,20,29,0.14)';
+        ctx.beginPath();
+        ctx.moveTo(x + size * 0.58, y + size * 0.16);
+        ctx.lineTo(x + size * 0.74, y + size * 0.16);
+        ctx.lineTo(x + size * 0.74, y + size * 0.32);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawTutorialMenuTile(ctx, x, y, w, h, kind, primary = false) {
+      ctx.save();
+      const tileFill = primary
+        ? ctx.createLinearGradient(x, y, x, y + h)
+        : ctx.createLinearGradient(x, y, x, y + h);
+      if (primary) {
+        tileFill.addColorStop(0, 'rgba(255, 214, 112, 0.36)');
+        tileFill.addColorStop(1, 'rgba(255, 171, 52, 0.18)');
+      } else {
+        tileFill.addColorStop(0, 'rgba(255,255,255,0.16)');
+        tileFill.addColorStop(1, 'rgba(255,255,255,0.06)');
+      }
+      ctx.fillStyle = tileFill;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 20);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.stroke();
+      const iconSize = Math.min(42, w * 0.34);
+      drawTutorialMenuTileIcon(ctx, x + (w - iconSize) / 2, y + (h - iconSize) / 2, iconSize, kind, primary);
+      ctx.restore();
+    }
+
+    function drawTutorialFinishWall(ctx, x, top, bottom) {
+      const width = 22;
+      const fill = ctx.createLinearGradient(x, 0, x + width, 0);
+      fill.addColorStop(0, 'rgba(255, 191, 71, 0.12)');
+      fill.addColorStop(0.5, 'rgba(255, 191, 71, 0.52)');
+      fill.addColorStop(1, 'rgba(255, 244, 209, 0.2)');
+      ctx.fillStyle = fill;
+      ctx.fillRect(x, top, width, bottom - top);
+      ctx.strokeStyle = '#ffbf47';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(x + 1.5, top + 1.5, width - 3, bottom - top - 3);
+      for (let y = top + 10; y < bottom - 10; y += 18) {
+        ctx.beginPath();
+        ctx.moveTo(x + 4, y);
+        ctx.lineTo(x + width - 4, y + 8);
+        ctx.strokeStyle = 'rgba(255,245,220,0.28)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+      const glow = ctx.createRadialGradient(x + width / 2, (top + bottom) / 2, 4, x + width / 2, (top + bottom) / 2, 30);
+      glow.addColorStop(0, 'rgba(255,250,234,0.9)');
+      glow.addColorStop(1, 'rgba(255,191,71,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(x + width / 2, (top + bottom) / 2, 30, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawTutorialOrb(ctx, x, y, radius, colorA = '#c5fffe', colorB = '#38a7ff') {
+      const gradient = ctx.createRadialGradient(x - 3, y - 4, 2, x, y, radius);
+      gradient.addColorStop(0, colorA);
+      gradient.addColorStop(1, colorB);
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.strokeStyle = '#eaffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x, y, radius * 0.55, Math.PI * 0.3, Math.PI * 1.5);
+      ctx.strokeStyle = '#f4ffff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function cloneTutorialCanvasImage(sourceCanvas) {
+      const image = document.createElement('img');
+      image.className = 'tutorial-shot-canvas';
+      image.src = sourceCanvas.toDataURL('image/png');
+      image.width = sourceCanvas.width;
+      image.height = sourceCanvas.height;
+      return image;
+    }
+
+    function sanitizeTutorialClone(root) {
+      root.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+      root.querySelectorAll('[for]').forEach((node) => node.removeAttribute('for'));
+      root.querySelectorAll('button, input, select, textarea').forEach((node) => {
+        node.disabled = true;
+      });
+      return root;
+    }
+
+    function finalizeTutorialScreenClone(screen, width, height) {
+      screen.classList.add('active', 'tutorial-shot-screen');
+      screen.removeAttribute('data-screen');
+      screen.style.width = `${width}px`;
+      screen.style.height = `${height}px`;
+      return sanitizeTutorialClone(screen);
+    }
+
+    function setEditorCloneToolPage(screen, pageName) {
+      screen.querySelectorAll('.tool-page').forEach((page) => {
+        page.classList.toggle('active', page.dataset.toolPage === pageName);
+      });
+      const sectionName = screen.querySelector(`[data-tool-page="${pageName}"]`)?.dataset.toolSection ?? 'build';
+      screen.querySelectorAll('.tool-section-btn').forEach((button) => {
+        button.classList.toggle('active', button.dataset.toolSection === sectionName);
+      });
+    }
+
+    function buildTutorialMenuShot() {
+      const screen = screens.menu.cloneNode(true);
+      return {
+        width: 760,
+        height: 430,
+        node: finalizeTutorialScreenClone(screen, 760, 430)
+      };
+    }
+
+    function buildTutorialUserLevelsShot() {
+      const screen = screens.userLevels.cloneNode(true);
+      const search = screen.querySelector('#userLevelsSearch');
+      if (search) {
+        search.value = 'Pulse';
+      }
+      const list = screen.querySelector('#userLevelsList');
+      if (list) {
+        list.innerHTML = `
+          <div class="level-card active">
+            <h3>PulseMadness</h3>
+            <p>Автор: Maksim</p>
+            <div class="level-card-row">
+              <span class="mini-text">Сегодня</span>
+              <button type="button">Играть</button>
+            </div>
+          </div>
+          <div class="level-card">
+            <h3>Sky Trial</h3>
+            <p>Автор: NeonFox</p>
+            <div class="level-card-row">
+              <span class="mini-text">Вчера</span>
+              <button type="button">Играть</button>
+            </div>
+          </div>
+        `;
+      }
+      const author = screen.querySelector('#userLevelAuthorLabel');
+      if (author) {
+        author.textContent = 'Автор: Maksim';
+      }
+      return {
+        width: 860,
+        height: 430,
+        node: finalizeTutorialScreenClone(screen, 860, 430)
+      };
+    }
+
+    function buildTutorialSavedShot(withPublishFocus = false) {
+      const screen = screens.saved.cloneNode(true);
+      const select = screen.querySelector('#savedLevelsSelect');
+      if (select) {
+        select.innerHTML = '<option value="PulseMadness" selected>PulseMadness</option><option value="Sky Trial">Sky Trial</option>';
+      }
+      if (withPublishFocus) {
+        const publishButton = screen.querySelector('#publishLevelBtn');
+        if (publishButton) {
+          publishButton.classList.remove('secondary');
+        }
+      }
+      return {
+        width: 860,
+        height: 430,
+        node: finalizeTutorialScreenClone(screen, 860, 430)
+      };
+    }
+
+    function buildTutorialEditorShot(mode = 'editor') {
+      const screen = screens.editor.cloneNode(true);
+      const editorCanvasClone = screen.querySelector('#editorCanvas');
+      if (editorCanvasClone) {
+        const image = cloneTutorialCanvasImage(editorCanvas);
+        image.style.width = `${editorCanvas.width}px`;
+        image.style.height = `${editorCanvas.height}px`;
+        editorCanvasClone.replaceWith(image);
+      }
+      const badges = screen.querySelectorAll('.status-row .badge');
+      if (badges[1]) {
+        if (mode === 'layers') {
+          badges[1].textContent = 'Слой: задний • Блок';
+        } else if (mode === 'build') {
+          badges[1].textContent = 'Слой: передний • Блок';
+        } else if (mode === 'save') {
+          badges[1].textContent = 'Редактор уровня';
+        } else {
+          badges[1].textContent = 'Редактор уровня';
+        }
+      }
+      if (mode === 'layers') {
+        const front = screen.querySelector('#editorFrontLayerBtn');
+        const back = screen.querySelector('#editorBackLayerBtn');
+        if (front && back) {
+          front.className = 'ghost';
+          back.className = 'secondary active';
+        }
+      }
+      if (mode === 'build') {
+        setEditorCloneToolPage(screen, 'build-1');
+      }
+      if (mode === 'save') {
+        const modal = levelSaveModal.cloneNode(true);
+        modal.classList.add('open');
+        screen.append(modal);
+      }
+      return {
+        width: 980,
+        height: 520,
+        node: finalizeTutorialScreenClone(screen, 980, 520)
+      };
+    }
+
+    function buildTutorialDomShot(scene) {
+      if (scene === 'menu') {
+        return buildTutorialMenuShot();
+      }
+      if (scene === 'community') {
+        return buildTutorialUserLevelsShot();
+      }
+      if (scene === 'publish') {
+        return buildTutorialSavedShot(true);
+      }
+      if (scene === 'editor' || scene === 'save' || scene === 'layers' || scene === 'build') {
+        return buildTutorialEditorShot(scene);
+      }
+      return null;
+    }
+
+    function renderTutorialDomShots() {
+      document.querySelectorAll('.tutorial-dom-shot').forEach((host) => {
+        if (!host.offsetParent || host.clientWidth <= 0 || host.clientHeight <= 0) {
+          return;
+        }
+        const scene = host.dataset.domScene;
+        const shot = buildTutorialDomShot(scene);
+        host.innerHTML = '';
+        if (!shot) {
+          return;
+        }
+        const scale = Math.min(host.clientWidth / shot.width, host.clientHeight / shot.height);
+        const scaledWidth = shot.width * scale;
+        const scaledHeight = shot.height * scale;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'tutorial-shot-scale';
+        wrapper.style.width = `${shot.width}px`;
+        wrapper.style.height = `${shot.height}px`;
+        wrapper.style.transform = `scale(${scale})`;
+        wrapper.style.left = `${(host.clientWidth - scaledWidth) / 2}px`;
+        wrapper.style.top = `${(host.clientHeight - scaledHeight) / 2}px`;
+        wrapper.append(shot.node);
+        host.append(wrapper);
+      });
+    }
+
+    function renderTutorialScene(canvas) {
+      const scene = canvas.dataset.scene;
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.max(160, Math.round(canvas.clientWidth));
+      const height = Math.max(100, Math.round(canvas.clientHeight));
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      const tile = Math.max(18, Math.round(height * 0.18));
+      const groundY = height - 24;
+      drawTutorialBackground(ctx, width, height, scene === 'editor' || scene === 'build' || scene === 'layers');
+
+      if (scene === 'controls') {
+        drawTutorialPanel(ctx, 10, 10, width - 20, height - 20, 'rgba(5, 18, 31, 0.78)', 'rgba(132, 220, 255, 0.28)');
+        drawTutorialButton(ctx, 18, 18, 68, 22, 'Обучение');
+        drawTutorialButton(ctx, width - 94, 18, 76, 22, 'Профиль');
+        drawTutorialTitleText(ctx, width / 2 - 58, 28, 'Neon\nDash');
+        const baseY = height - 72;
+        drawTutorialMenuTile(ctx, width / 2 - 136, baseY + 12, 72, 56, 'tools', false);
+        drawTutorialMenuTile(ctx, width / 2 - 46, baseY, 92, 68, 'play', true);
+        drawTutorialMenuTile(ctx, width / 2 + 64, baseY + 12, 72, 56, 'files', false);
+      } else if (scene === 'jump') {
+        drawTutorialBlock(ctx, 14, groundY - tile, tile);
+        drawTutorialBlock(ctx, 14 + tile, groundY - tile, tile);
+        drawTutorialCube(ctx, 30, groundY - tile - 24, tile, 'starter', -0.38);
+        drawTutorialSpike(ctx, width - 84, groundY - tile + 2, tile);
+        drawTutorialSpike(ctx, width - 60, groundY - tile + 2, tile);
+        ctx.strokeStyle = 'rgba(255,255,255,0.72)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(82, 42, 50, Math.PI * 0.12, Math.PI * 1.1);
+        ctx.stroke();
+        drawTutorialButton(ctx, width - 100, 14, 82, 22, 'Пробел / Тап', 'primary');
+      } else if (scene === 'hazards') {
+        drawTutorialBlock(ctx, 14, groundY - tile, tile);
+        drawTutorialCube(ctx, 18, groundY - tile - 1, tile, 'starter');
+        drawTutorialSpike(ctx, 82, groundY - tile + 2, tile);
+        drawTutorialSaw(ctx, 144, groundY - 10, 13);
+        drawTutorialSpike(ctx, 188, groundY - tile + 2, tile);
+        drawTutorialLine(ctx, 16, 14, 76, 9, '#effcff');
+        drawTutorialLine(ctx, 16, 28, 54, 6, '#ffb0b8');
+      } else if (scene === 'finish' || scene === 'verify' || scene === 'publish') {
+        drawTutorialBlock(ctx, 14, groundY - tile, tile);
+        drawTutorialBlock(ctx, 14 + tile, groundY - tile, tile);
+        drawTutorialBlock(ctx, 90, groundY - tile, tile);
+        drawTutorialCube(ctx, 30, groundY - tile - 1, tile, scene === 'publish' ? 'pulse' : 'starter');
+        drawTutorialFinishWall(ctx, width - 42, 8, groundY + 18);
+        if (scene === 'publish') {
+          drawTutorialPanel(ctx, 14, 12, width - 28, 34, 'rgba(5,18,31,0.7)');
+          drawTutorialLine(ctx, 28, 24, 78, 8, '#effcff');
+          drawTutorialButton(ctx, width - 120, 18, 96, 20, 'Опубликовать', 'secondary');
+        } else if (scene === 'verify') {
+          drawTutorialPanel(ctx, 18, 14, 110, 28, 'rgba(12,50,42,0.76)', 'rgba(142,255,201,0.18)');
+          drawTutorialCheck(ctx, 28, 19);
+          drawTutorialLine(ctx, 58, 24, 50, 8, '#dfffee');
+        }
+      } else if (scene === 'editor' || scene === 'build') {
+        drawTutorialPanel(ctx, 12, 10, width - 24, 22, 'rgba(5,18,31,0.68)');
+        drawTutorialButton(ctx, 18, 14, 56, 14, 'Блок', 'primary');
+        drawTutorialButton(ctx, 78, 14, 50, 14, 'Шип');
+        drawTutorialButton(ctx, 132, 14, 62, 14, 'Триггер', 'secondary');
+        for (let gx = 0; gx < 6; gx += 1) {
+          drawTutorialLine(ctx, 24 + gx * 28, 44, 1, 52, '#82dfff', 0.22);
+        }
+        for (let gy = 0; gy < 3; gy += 1) {
+          drawTutorialLine(ctx, 24, 44 + gy * 24, 154, 1, '#82dfff', 0.22);
+        }
+        drawTutorialBlock(ctx, 34, 58, 24);
+        drawTutorialBlock(ctx, 58, 58, 24);
+        drawTutorialBlock(ctx, 82, 58, 24);
+        drawTutorialSpike(ctx, 130, 62, 20);
+        drawTutorialBlock(ctx, 170, 58, 24, '#6df1df', '#197c92');
+        drawTutorialHudPill(ctx, width - 58, 36, 28, 66, 'rgba(5,18,31,0.76)');
+        drawTutorialButton(ctx, width - 54, 42, 20, 14, '+', 'primary');
+        drawTutorialButton(ctx, width - 54, 60, 20, 14, '↺');
+        drawTutorialButton(ctx, width - 54, 78, 20, 14, 'G', 'secondary');
+      } else if (scene === 'save') {
+        drawTutorialPanel(ctx, 14, 12, width - 28, height - 24, 'rgba(5,18,31,0.62)');
+        for (let gx = 0; gx < 6; gx += 1) {
+          drawTutorialLine(ctx, 24 + gx * 28, 38, 1, 44, '#82dfff', 0.16);
+        }
+        drawTutorialBlock(ctx, 40, 52, 22);
+        drawTutorialBlock(ctx, 62, 52, 22);
+        drawTutorialSpike(ctx, 116, 56, 18);
+        drawTutorialPanel(ctx, width * 0.28, 24, width * 0.44, height * 0.58, 'rgba(5,18,31,0.9)', 'rgba(132,220,255,0.22)');
+        drawTutorialLine(ctx, width * 0.34, 38, 40, 9, '#effcff');
+        drawTutorialButton(ctx, width * 0.35, height * 0.42, 72, 24, 'Сохранить', 'primary');
+        drawTutorialButton(ctx, width * 0.35, height * 0.42 + 30, 58, 22, 'В меню');
+      } else if (scene === 'layers') {
+        drawTutorialBackground(ctx, width, height, true);
+        drawTutorialButton(ctx, 16, 14, 62, 18, 'Перед');
+        drawTutorialButton(ctx, 84, 14, 62, 18, 'Задний', 'secondary');
+        drawTutorialBlock(ctx, 34, 56, 28, '#ff9966', '#f04b43', 0.4);
+        drawTutorialBlock(ctx, 62, 32, 28, '#6df1df', '#197c92', 1);
+        drawTutorialLine(ctx, 108, 64, 58, 8, '#effcff');
+        drawTutorialLine(ctx, 108, 80, 46, 6, '#9fc4d8');
+      } else if (scene === 'community') {
+        drawTutorialPanel(ctx, 16, 16, width - 32, height - 32, 'rgba(5,18,31,0.76)');
+        drawTutorialLine(ctx, 30, 26, 64, 10, '#effcff');
+        drawTutorialLine(ctx, 30, 42, 54, 6, '#5fe3ff', 0.8);
+        drawTutorialPanel(ctx, 28, 56, width - 150, 22, 'rgba(255,255,255,0.06)', 'rgba(255,255,255,0.08)');
+        drawTutorialLine(ctx, 40, 63, 70, 8, '#9fc4d8');
+        drawTutorialPanel(ctx, 28, 86, width - 160, 48, 'rgba(255,255,255,0.04)', 'rgba(255,255,255,0.08)');
+        drawTutorialLine(ctx, 40, 98, 78, 8, '#effcff');
+        drawTutorialLine(ctx, 40, 114, 56, 6, '#9fc4d8');
+        drawTutorialPanel(ctx, width - 118, 86, 80, 54, 'rgba(255,255,255,0.045)', 'rgba(255,255,255,0.08)');
+        drawTutorialLine(ctx, width - 106, 98, 42, 8, '#effcff');
+        drawTutorialLine(ctx, width - 106, 114, 30, 6, '#9fc4d8');
+      } else if (scene === 'quality') {
+        drawTutorialBlock(ctx, 20, groundY - tile, tile);
+        drawTutorialBlock(ctx, 44, groundY - tile, tile);
+        drawTutorialSpike(ctx, 88, groundY - tile + 2, tile);
+        drawTutorialOrb(ctx, 132, groundY - tile - 20, 9);
+        drawTutorialBlock(ctx, 162, groundY - tile - 18, tile);
+        drawTutorialSpike(ctx, 206, groundY - tile - 16, tile);
+        ctx.strokeStyle = 'rgba(255,255,255,0.68)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(30, 26);
+        ctx.lineTo(54, 26);
+        ctx.lineTo(72, 18);
+        ctx.lineTo(96, 18);
+        ctx.lineTo(118, 30);
+        ctx.lineTo(142, 30);
+        ctx.lineTo(164, 22);
+        ctx.stroke();
+      }
+    }
+
+    function renderTutorialScenes() {
+      document.querySelectorAll('.tutorial-scene').forEach((canvas) => renderTutorialScene(canvas));
+      renderTutorialDomShots();
+    }
+
     function drawEditor() {
       editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
       editorCtx.save();
@@ -4644,15 +7089,34 @@
       drawGrid(editorCtx, viewport, editorCameraX);
       drawGround(editorCtx, viewport.width, viewport.height);
       editorCtx.translate(-editorCameraX, 0);
-      editorLevel.blocks.forEach((block) => drawBlock(editorCtx, block));
-      editorLevel.dynamicBlocks.forEach((block) => drawDynamicBlock(editorCtx, block));
-      editorLevel.platforms.forEach((platform) => drawPlatform(editorCtx, platform));
-      editorLevel.bounces.forEach((bounce) => drawBounce(editorCtx, bounce));
-      editorLevel.gravityOrbs.forEach((orb) => drawGravityOrb(editorCtx, orb));
-      editorLevel.spikes.forEach((spike) => drawSpike(editorCtx, spike));
-      editorLevel.triggers.forEach((trigger) => drawTriggerMarker(editorCtx, trigger));
-      editorLevel.pulseTriggers.forEach((trigger) => drawPulseTriggerMarker(editorCtx, trigger));
-      editorLevel.moveTriggers.forEach((trigger) => drawMoveTriggerMarker(editorCtx, trigger));
+      drawRoutePointerPath(editorCtx, editorLevel, 'back');
+      editorLevel.blocks.filter((item) => layerOf(item) === 'back').forEach((block) => drawBlock(editorCtx, block));
+      editorLevel.dynamicBlocks.filter((item) => layerOf(item) === 'back').forEach((block) => drawDynamicBlock(editorCtx, block));
+      editorLevel.platforms.filter((item) => layerOf(item) === 'back').forEach((platform) => drawPlatform(editorCtx, platform));
+      editorLevel.bounces.filter((item) => layerOf(item) === 'back').forEach((bounce) => drawBounce(editorCtx, bounce));
+      (editorLevel.gravityOrbs ?? []).filter((item) => layerOf(item) === 'back').forEach((orb) => drawGravityOrb(editorCtx, orb));
+      editorLevel.spikes.filter((item) => layerOf(item) === 'back').forEach((spike) => drawSpike(editorCtx, spike));
+      (editorLevel.saws ?? []).filter((item) => layerOf(item) === 'back').forEach((saw) => drawSaw(editorCtx, saw));
+      editorLevel.triggers.filter((item) => layerOf(item) === 'back').forEach((trigger) => drawTriggerMarker(editorCtx, trigger));
+      (editorLevel.invisibleTriggers ?? []).filter((item) => layerOf(item) === 'back').forEach((trigger) => drawInvisibleTriggerMarker(editorCtx, trigger));
+      editorLevel.pulseTriggers.filter((item) => layerOf(item) === 'back').forEach((trigger) => drawPulseTriggerMarker(editorCtx, trigger));
+      editorLevel.moveTriggers.filter((item) => layerOf(item) === 'back').forEach((trigger) => drawMoveTriggerMarker(editorCtx, trigger));
+      (editorLevel.routePointers ?? []).filter((item) => layerOf(item) === 'back').forEach((pointer) => drawRoutePointerMarker(editorCtx, pointer));
+      (editorLevel.routeTriggers ?? []).filter((item) => layerOf(item) === 'back').forEach((trigger) => drawRouteTriggerMarker(editorCtx, trigger));
+      drawRoutePointerPath(editorCtx, editorLevel, 'front');
+      editorLevel.blocks.filter((item) => layerOf(item) === 'front').forEach((block) => drawBlock(editorCtx, block));
+      editorLevel.dynamicBlocks.filter((item) => layerOf(item) === 'front').forEach((block) => drawDynamicBlock(editorCtx, block));
+      editorLevel.platforms.filter((item) => layerOf(item) === 'front').forEach((platform) => drawPlatform(editorCtx, platform));
+      editorLevel.bounces.filter((item) => layerOf(item) === 'front').forEach((bounce) => drawBounce(editorCtx, bounce));
+      (editorLevel.gravityOrbs ?? []).filter((item) => layerOf(item) === 'front').forEach((orb) => drawGravityOrb(editorCtx, orb));
+      editorLevel.spikes.filter((item) => layerOf(item) === 'front').forEach((spike) => drawSpike(editorCtx, spike));
+      (editorLevel.saws ?? []).filter((item) => layerOf(item) === 'front').forEach((saw) => drawSaw(editorCtx, saw));
+      editorLevel.triggers.filter((item) => layerOf(item) === 'front').forEach((trigger) => drawTriggerMarker(editorCtx, trigger));
+      (editorLevel.invisibleTriggers ?? []).filter((item) => layerOf(item) === 'front').forEach((trigger) => drawInvisibleTriggerMarker(editorCtx, trigger));
+      editorLevel.pulseTriggers.filter((item) => layerOf(item) === 'front').forEach((trigger) => drawPulseTriggerMarker(editorCtx, trigger));
+      editorLevel.moveTriggers.filter((item) => layerOf(item) === 'front').forEach((trigger) => drawMoveTriggerMarker(editorCtx, trigger));
+      (editorLevel.routePointers ?? []).filter((item) => layerOf(item) === 'front').forEach((pointer) => drawRoutePointerMarker(editorCtx, pointer));
+      (editorLevel.routeTriggers ?? []).filter((item) => layerOf(item) === 'front').forEach((trigger) => drawRouteTriggerMarker(editorCtx, trigger));
       drawStartMarker(editorCtx, editorLevel.start);
       drawFinishMarker(editorCtx, editorLevel.finish);
       if (transformSelectionMode && selectedTransformObjects.length) {
@@ -4712,20 +7176,23 @@
       if (['block', 'brickBlock', 'steelBlock', 'panelBlock'].includes(tool)) {
         return 'build-1';
       }
-      if (tool === 'platform') {
+      if (['platform', 'miniBlock'].includes(tool)) {
         return 'build-2';
       }
-      if (tool === 'spike') {
+      if (['spike', 'saw'].includes(tool)) {
         return 'hazards-1';
       }
       if (['bounce', 'gravityOrb'].includes(tool)) {
         return 'orbs-1';
       }
-      if (['trigger', 'pulse', 'move', 'dynamicBlock'].includes(tool)) {
+      if (['trigger', 'invisibleTrigger', 'pulse', 'move'].includes(tool)) {
         return 'triggers-1';
       }
-      if (['start', 'finish'].includes(tool)) {
+      if (['start', 'finish', 'routePointer', 'routeTrigger'].includes(tool)) {
         return 'triggers-2';
+      }
+      if (tool === 'dynamicBlock') {
+        return 'triggers-3';
       }
       if (['erase', 'groupAssign', 'rotateSmall', 'rotateLarge'].includes(tool)) {
         return 'debug-1';
@@ -4778,14 +7245,19 @@
         brickBlock: 'Кирпичи',
         steelBlock: 'Стальной блок',
         panelBlock: 'Панельный блок',
+        miniBlock: 'Мини-блок',
         dynamicBlock: 'Динамический блок',
         spike: 'Шип',
+        saw: 'Пила',
         platform: 'Платформа',
         bounce: 'Батут',
         gravityOrb: 'Орб гравитации',
         trigger: 'Color Trigger',
+        invisibleTrigger: 'Invisible Trigger',
         pulse: 'Pulse Trigger',
         move: 'Move Trigger',
+        routePointer: 'Указатель',
+        routeTrigger: 'Маршрутный триггер',
         erase: 'Ластик',
         groupAssign: 'Выдача группы',
         rotateSmall: '45°',
@@ -4820,78 +7292,142 @@
       editorZoomLabel.textContent = `${Math.round(editorZoom * 100)}%`;
     }
 
+    function syncEditorLayerUi() {
+      const isFront = editorBuildLayer === 'front';
+      editorFrontLayerBtn.classList.toggle('active', isFront);
+      editorFrontLayerBtn.classList.toggle('secondary', isFront);
+      editorFrontLayerBtn.classList.toggle('ghost', !isFront);
+      editorBackLayerBtn.classList.toggle('active', !isFront);
+      editorBackLayerBtn.classList.toggle('secondary', !isFront);
+      editorBackLayerBtn.classList.toggle('ghost', isFront);
+      syncGroupModeButton();
+    }
+
+    function setEditorLayer(layer) {
+      editorBuildLayer = normalizeLayer(layer);
+      syncEditorLayerUi();
+      drawEditor();
+    }
+
     function addUnique(list, x, y) {
-      if (!list.some((item) => item.x === x && item.y === y)) {
-        list.push({ x, y, group: 0 });
+      if (!list.some((item) => item.x === x && item.y === y && layerOf(item) === editorBuildLayer)) {
+        list.push({ x, y, group: 0, layer: editorBuildLayer });
       }
     }
 
     function addBlockVariant(x, y, variant) {
-      const existing = editorLevel.blocks.find((item) => item.x === x && item.y === y);
+      const existing = editorLevel.blocks.find((item) => item.x === x && item.y === y && layerOf(item) === editorBuildLayer);
       if (existing) {
         existing.variant = variant;
         return existing;
       }
-      const block = { x, y, group: 0, variant };
+      if (variant === 'mini') {
+        const miniWorldX = x * config.tile;
+        const miniWorldY = y * config.tile;
+        if (anySolidBlockAtArea(miniWorldX, miniWorldY, config.tile / 2, config.tile / 2)) {
+          return null;
+        }
+      } else {
+        const tileWorldX = x * config.tile;
+        const tileWorldY = y * config.tile;
+        editorLevel.blocks = editorLevel.blocks.filter((item) => {
+          if (layerOf(item) !== editorBuildLayer) {
+            return true;
+          }
+          return !blockIntersects(item, tileWorldX, tileWorldY, config.tile, config.tile);
+        });
+      }
+      const block = { x, y, group: 0, variant, layer: editorBuildLayer };
       editorLevel.blocks.push(block);
       return block;
     }
 
-    function removeAt(list, x, y) {
-      const index = list.findIndex((item) => item.x === x && item.y === y);
+    function removeAt(list, x, y, layer = editorBuildLayer) {
+      const index = list.findIndex((item) => item.x === x && item.y === y && layerOf(item) === layer);
       if (index >= 0) {
         list.splice(index, 1);
       }
     }
 
-    function objectAt(x, y) {
-      const moveTrigger = editorLevel.moveTriggers.find((item) => item.x === x && item.y === y);
+    function objectAt(worldX, worldY) {
+      const exactHit = (kind, list) => list.find((item) => {
+        if (layerOf(item) !== editorBuildLayer) {
+          return false;
+        }
+        const rect = objectRect(kind, item);
+        return worldX >= rect.x && worldX < rect.x + rect.w && worldY >= rect.y && worldY < rect.y + rect.h;
+      });
+
+      const moveTrigger = exactHit('move', editorLevel.moveTriggers);
       if (moveTrigger) {
         return { kind: 'move', ref: moveTrigger };
       }
-      const bounce = editorLevel.bounces.find((item) => item.x === x && item.y === y);
+      const routeTrigger = exactHit('routeTrigger', editorLevel.routeTriggers ?? []);
+      if (routeTrigger) {
+        return { kind: 'routeTrigger', ref: routeTrigger };
+      }
+      const routePointer = exactHit('routePointer', editorLevel.routePointers ?? []);
+      if (routePointer) {
+        return { kind: 'routePointer', ref: routePointer };
+      }
+      const bounce = exactHit('bounce', editorLevel.bounces);
       if (bounce) {
         return { kind: 'bounce', ref: bounce };
       }
-      const dynamicBlock = (editorLevel.dynamicBlocks ?? []).find((item) => item.x === x && item.y === y);
+      const dynamicBlock = exactHit('dynamicBlock', editorLevel.dynamicBlocks ?? []);
       if (dynamicBlock) {
         return { kind: 'dynamicBlock', ref: dynamicBlock };
       }
-      const gravityOrb = editorLevel.gravityOrbs.find((item) => item.x === x && item.y === y);
+      const gravityOrb = exactHit('gravityOrb', editorLevel.gravityOrbs);
       if (gravityOrb) {
         return { kind: 'gravityOrb', ref: gravityOrb };
       }
-      const pulseTrigger = editorLevel.pulseTriggers.find((item) => item.x === x && item.y === y);
+      const pulseTrigger = exactHit('pulse', editorLevel.pulseTriggers);
       if (pulseTrigger) {
         return { kind: 'pulse', ref: pulseTrigger };
       }
-      const trigger = editorLevel.triggers.find((item) => item.x === x && item.y === y);
+      const trigger = exactHit('trigger', editorLevel.triggers);
       if (trigger) {
         return { kind: 'trigger', ref: trigger };
       }
-      const platform = editorLevel.platforms.find((item) => item.x === x && item.y === y);
+      const invisibleTrigger = exactHit('invisibleTrigger', editorLevel.invisibleTriggers ?? []);
+      if (invisibleTrigger) {
+        return { kind: 'invisibleTrigger', ref: invisibleTrigger };
+      }
+      const platform = exactHit('platform', editorLevel.platforms);
       if (platform) {
         return { kind: 'platform', ref: platform };
       }
-      const block = editorLevel.blocks.find((item) => item.x === x && item.y === y);
+      const block = exactHit('block', editorLevel.blocks);
       if (block) {
         const variantKind = {
           solid: 'block',
           brick: 'brickBlock',
           steel: 'steelBlock',
-          panel: 'panelBlock'
+          panel: 'panelBlock',
+          mini: 'miniBlock'
         }[block.variant ?? 'solid'] ?? 'block';
         return { kind: variantKind, ref: block };
       }
-      const spike = editorLevel.spikes.find((item) => item.x === x && item.y === y);
+      const spike = exactHit('spike', editorLevel.spikes);
       if (spike) {
         return { kind: 'spike', ref: spike };
       }
-      if (editorLevel.start.x === x && editorLevel.start.y === y) {
-        return { kind: 'start', ref: editorLevel.start };
+      const saw = exactHit('saw', editorLevel.saws ?? []);
+      if (saw) {
+        return { kind: 'saw', ref: saw };
       }
-      if (editorLevel.finish.x === x && editorLevel.finish.y === y) {
-        return { kind: 'finish', ref: editorLevel.finish };
+      if (layerOf(editorLevel.start) === editorBuildLayer) {
+        const startRect = objectRect('start', editorLevel.start);
+        if (worldX >= startRect.x && worldX < startRect.x + startRect.w && worldY >= startRect.y && worldY < startRect.y + startRect.h) {
+          return { kind: 'start', ref: editorLevel.start };
+        }
+      }
+      if (layerOf(editorLevel.finish) === editorBuildLayer) {
+        const finishRect = objectRect('finish', editorLevel.finish);
+        if (worldX >= finishRect.x && worldX < finishRect.x + finishRect.w && worldY >= finishRect.y && worldY < finishRect.y + finishRect.h) {
+          return { kind: 'finish', ref: editorLevel.finish };
+        }
       }
       return null;
     }
@@ -4918,8 +7454,42 @@
 
     function openTriggerEditor(trigger) {
       editedTrigger = trigger;
+      editedTriggerType = 'color';
+      triggerModalTitle.textContent = 'Настройка Color Trigger';
+      triggerModalDescription.textContent = 'При касании этого объекта можно перекрасить группу, задний экран или пол.';
+      triggerTargetTypeField.classList.remove('hidden');
+      triggerTargetTypeInput.innerHTML = `
+        <option value="group">Группу</option>
+        <option value="background">Задний экран</option>
+        <option value="ground">Пол</option>
+      `;
+      triggerColorField.classList.remove('hidden');
+      triggerDeactivateField.classList.add('hidden');
+      triggerTargetTypeInput.value = trigger.targetType ?? 'group';
       triggerTargetInput.value = String(trigger.targetGroup ?? 0);
       triggerColorInput.value = trigger.color ?? '#ff5c6c';
+      triggerDeactivateInput.checked = false;
+      syncTriggerTargetUi();
+      triggerModal.classList.add('open');
+    }
+
+    function openInvisibleTriggerEditor(trigger) {
+      editedTrigger = trigger;
+      editedTriggerType = 'invisible';
+      triggerModalTitle.textContent = 'Настройка Invisible Trigger';
+      triggerModalDescription.textContent = 'При касании этого объекта можно скрыть группу или самого игрока. Режим деактивации вернет видимость.';
+      triggerTargetTypeField.classList.remove('hidden');
+      triggerColorField.classList.add('hidden');
+      triggerDeactivateField.classList.remove('hidden');
+      triggerTargetTypeInput.innerHTML = `
+        <option value="group">Группу</option>
+        <option value="player">Игрока</option>
+      `;
+      triggerTargetTypeInput.value = trigger.targetType ?? 'group';
+      triggerTargetInput.value = String(trigger.targetGroup ?? 0);
+      triggerColorInput.value = '#ff5c6c';
+      triggerDeactivateInput.checked = Boolean(trigger.deactivate);
+      syncTriggerTargetUi();
       triggerModal.classList.add('open');
     }
 
@@ -4945,6 +7515,35 @@
       moveModal.classList.add('open');
     }
 
+    function syncRouteModalUi() {
+      const pointerMode = Boolean(editedRoutePointer);
+      routePointerPanel.classList.toggle('hidden', !pointerMode);
+      routeTriggerPanel.classList.toggle('hidden', pointerMode);
+    }
+
+    function openRoutePointerEditor(pointer) {
+      editedRoutePointer = pointer;
+      editedRouteTrigger = null;
+      routeModalTitle.textContent = 'Настройка указателя';
+      routeModalDescription.textContent = 'Выбери номер стрелочки и время, за которое группа дойдет от нее до следующего указателя.';
+      routePointerNumberInput.value = String(pointer.number ?? 1);
+      routePointerDurationInput.value = String(pointer.duration ?? 1);
+      syncRouteModalUi();
+      routeModal.classList.add('open');
+    }
+
+    function openRouteTriggerEditor(trigger) {
+      editedRouteTrigger = trigger;
+      editedRoutePointer = null;
+      routeModalTitle.textContent = 'Настройка маршрутного триггера';
+      routeModalDescription.textContent = 'Этот триггер поведет выбранную группу по порядку от первого номера до последнего.';
+      routeTriggerTargetInput.value = String(trigger.targetGroup ?? 0);
+      routeTriggerStartInput.value = String(trigger.startNumber ?? 1);
+      routeTriggerEndInput.value = String(trigger.endNumber ?? 1);
+      syncRouteModalUi();
+      routeModal.classList.add('open');
+    }
+
     function openDynamicBlockEditor(block) {
       editedDynamicBlock = block;
       dynamicTouchGroupInput.value = String(block.touchGroup ?? 0);
@@ -4954,8 +7553,10 @@
     }
 
     function syncGroupModeButton() {
-      groupModeBtn.classList.toggle('active', groupAssignMode);
-      groupModeBtn.textContent = groupAssignMode ? 'Группы: вкл' : 'Добавить группу';
+      if (groupModeBtn) {
+        groupModeBtn.classList.toggle('active', groupAssignMode);
+        groupModeBtn.textContent = groupAssignMode ? 'Группы: вкл' : 'Добавить группу';
+      }
       toolButtons.forEach((button) => {
         if (button.dataset.tool === 'groupAssign') {
           button.classList.toggle('active', groupAssignMode);
@@ -4964,11 +7565,11 @@
         }
       });
       if (groupAssignMode) {
-        selectedToolLabel.textContent = 'Режим: назначение групп';
+        selectedToolLabel.textContent = `Слой: ${editorBuildLayer === 'front' ? 'передний' : 'задний'} • группы`;
       } else if (transformSelectionMode) {
-        selectedToolLabel.textContent = `Режим: ${transformModeLabel()}`;
+        selectedToolLabel.textContent = `Слой: ${editorBuildLayer === 'front' ? 'передний' : 'задний'} • ${transformModeLabel()}`;
       } else {
-        selectedToolLabel.textContent = `Инструмент: ${toolLabel(selectedTool)}`;
+        selectedToolLabel.textContent = `Слой: ${editorBuildLayer === 'front' ? 'передний' : 'задний'} • ${toolLabel(selectedTool)}`;
       }
     }
 
@@ -4995,18 +7596,33 @@
       moveFollowDurationLabel.textContent = followPlayer ? 'Таймер преследования' : 'Время движения';
     }
 
+    function syncTriggerTargetUi() {
+      const isGroupTarget = triggerTargetTypeInput.value === 'group';
+      const targetLabel = triggerTargetInput.parentElement?.querySelector('label');
+      if (targetLabel) {
+        targetLabel.textContent = editedTriggerType === 'invisible' ? 'Номер группы' : 'Номер группы';
+      }
+      triggerTargetInput.parentElement.classList.toggle('hidden', !isGroupTarget);
+    }
+
     function closeModals() {
       groupModal.classList.remove('open');
+      closeEditorPauseMenu();
+      closeLevelSaveMenu();
       triggerModal.classList.remove('open');
       pulseModal.classList.remove('open');
       moveModal.classList.remove('open');
       dynamicBlockModal.classList.remove('open');
+      routeModal.classList.remove('open');
       editedObject = null;
       editedObjects = [];
       editedTrigger = null;
+      editedTriggerType = 'color';
       editedPulseTrigger = null;
       editedMoveTrigger = null;
       editedDynamicBlock = null;
+      editedRoutePointer = null;
+      editedRouteTrigger = null;
     }
 
     function editTile(event) {
@@ -5015,15 +7631,18 @@
         return;
       }
       const { x: worldX, y: worldY } = editorPointerToWorld(event);
-      const x = Math.floor(worldX / config.tile);
-      const y = Math.floor(worldY / config.tile);
+      const tileX = Math.floor(worldX / config.tile);
+      const tileY = Math.floor(worldY / config.tile);
+      const blockPlacement = blockPlacementFromWorld(worldX, worldY, selectedTool === 'miniBlock' ? 'mini' : 'solid');
+      const x = blockPlacement.x;
+      const y = blockPlacement.y;
 
-      if (x < 0 || x >= config.cols || y < 0 || y >= config.rows || y >= 10) {
+      if (x < 0 || x >= config.cols || y < 0 || y >= config.rows || tileY >= 10 || (selectedTool === 'miniBlock' && y + 0.5 > 10)) {
         return;
       }
 
-      const existing = objectAt(x, y);
-      const existingPlatform = editorLevel.platforms.find((item) => item.x === x && item.y === y);
+      const existing = objectAt(worldX, worldY);
+      const existingPlatform = editorLevel.platforms.find((item) => item.x === tileX && item.y === tileY && layerOf(item) === editorBuildLayer);
 
       if (groupAssignMode) {
         if (existing) {
@@ -5033,28 +7652,36 @@
       }
 
       if (selectedTool === 'erase') {
-        if (['block', 'brickBlock', 'steelBlock', 'panelBlock'].includes(existing?.kind)) {
-          removeAt(editorLevel.blocks, x, y);
+        if (['block', 'brickBlock', 'steelBlock', 'panelBlock', 'miniBlock'].includes(existing?.kind)) {
+          removeAt(editorLevel.blocks, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'dynamicBlock') {
-          removeAt(editorLevel.dynamicBlocks, x, y);
+          removeAt(editorLevel.dynamicBlocks, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'bounce') {
-          removeAt(editorLevel.bounces, x, y);
+          removeAt(editorLevel.bounces, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'gravityOrb') {
-          removeAt(editorLevel.gravityOrbs, x, y);
+          removeAt(editorLevel.gravityOrbs, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'platform') {
-          removeAt(editorLevel.platforms, x, y);
+          removeAt(editorLevel.platforms, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'spike') {
-          removeAt(editorLevel.spikes, x, y);
+          removeAt(editorLevel.spikes, existing.ref.x, existing.ref.y);
+        } else if (existing?.kind === 'saw') {
+          removeAt(editorLevel.saws, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'trigger') {
-          removeAt(editorLevel.triggers, x, y);
+          removeAt(editorLevel.triggers, existing.ref.x, existing.ref.y);
+        } else if (existing?.kind === 'invisibleTrigger') {
+          removeAt(editorLevel.invisibleTriggers, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'pulse') {
-          removeAt(editorLevel.pulseTriggers, x, y);
+          removeAt(editorLevel.pulseTriggers, existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'move') {
-          removeAt(editorLevel.moveTriggers, x, y);
+          removeAt(editorLevel.moveTriggers, existing.ref.x, existing.ref.y);
+        } else if (existing?.kind === 'routePointer') {
+          removeAt(editorLevel.routePointers ?? [], existing.ref.x, existing.ref.y);
+        } else if (existing?.kind === 'routeTrigger') {
+          removeAt(editorLevel.routeTriggers ?? [], existing.ref.x, existing.ref.y);
         } else if (existing?.kind === 'start') {
-          editorLevel.start = { ...editorLevel.start, x: 2, y: 9 };
+          editorLevel.start = { ...editorLevel.start, x: 2, y: 9, layer: 'front' };
         } else if (existing?.kind === 'finish') {
-          editorLevel.finish = { ...editorLevel.finish, x: 75, y: 9 };
+          editorLevel.finish = { ...editorLevel.finish, x: 75, y: 9, layer: 'front' };
         }
         invalidateEditorVerification();
         drawEditor();
@@ -5065,7 +7692,7 @@
         if (existingPlatform) {
           return;
         } else {
-          addUnique(editorLevel.platforms, x, y);
+          addUnique(editorLevel.platforms, tileX, tileY);
           invalidateEditorVerification();
           drawEditor();
         }
@@ -5075,10 +7702,16 @@
       if (existing) {
         if (existing.kind === 'trigger') {
           openTriggerEditor(existing.ref);
+        } else if (existing.kind === 'invisibleTrigger') {
+          openInvisibleTriggerEditor(existing.ref);
         } else if (existing.kind === 'pulse') {
           openPulseEditor(existing.ref);
         } else if (existing.kind === 'move') {
           openMoveEditor(existing.ref);
+        } else if (existing.kind === 'routePointer') {
+          openRoutePointerEditor(existing.ref);
+        } else if (existing.kind === 'routeTrigger') {
+          openRouteTriggerEditor(existing.ref);
         } else if (existing.kind === 'dynamicBlock') {
           openDynamicBlockEditor(existing.ref);
         }
@@ -5093,32 +7726,45 @@
         addBlockVariant(x, y, 'steel');
       } else if (selectedTool === 'panelBlock') {
         addBlockVariant(x, y, 'panel');
+      } else if (selectedTool === 'miniBlock') {
+        addBlockVariant(x, y, 'mini');
       } else if (selectedTool === 'dynamicBlock') {
-        if (!(editorLevel.dynamicBlocks ?? []).some((item) => item.x === x && item.y === y)) {
-          editorLevel.dynamicBlocks.push({ x, y, group: 0, touchGroup: 0, activateGroup: 0, touchable: false });
+        if (!(editorLevel.dynamicBlocks ?? []).some((item) => item.x === tileX && item.y === tileY && layerOf(item) === editorBuildLayer)) {
+          editorLevel.dynamicBlocks.push({ x: tileX, y: tileY, group: 0, touchGroup: 0, activateGroup: 0, touchable: false, layer: editorBuildLayer });
         }
-        openDynamicBlockEditor(editorLevel.dynamicBlocks[editorLevel.dynamicBlocks.findIndex((item) => item.x === x && item.y === y)]);
+        openDynamicBlockEditor(editorLevel.dynamicBlocks[editorLevel.dynamicBlocks.findIndex((item) => item.x === tileX && item.y === tileY && layerOf(item) === editorBuildLayer)]);
       } else if (selectedTool === 'bounce') {
-        addUnique(editorLevel.bounces, x, y);
+        addUnique(editorLevel.bounces, tileX, tileY);
       } else if (selectedTool === 'gravityOrb') {
-        addUnique(editorLevel.gravityOrbs, x, y);
+        addUnique(editorLevel.gravityOrbs, tileX, tileY);
       } else if (selectedTool === 'platform') {
-        addUnique(editorLevel.platforms, x, y);
+        addUnique(editorLevel.platforms, tileX, tileY);
       } else if (selectedTool === 'spike') {
-        addUnique(editorLevel.spikes, x, y);
+        addUnique(editorLevel.spikes, tileX, tileY);
+      } else if (selectedTool === 'saw') {
+        addUnique(editorLevel.saws, tileX, tileY);
       } else if (selectedTool === 'trigger') {
-        editorLevel.triggers.push({ x, y, group: 0, targetGroup: 1, color: '#ff5c6c' });
+        editorLevel.triggers.push({ x: tileX, y: tileY, group: 0, targetType: 'group', targetGroup: 1, color: '#ff5c6c', layer: editorBuildLayer });
         openTriggerEditor(editorLevel.triggers[editorLevel.triggers.length - 1]);
+      } else if (selectedTool === 'invisibleTrigger') {
+        editorLevel.invisibleTriggers.push({ x: tileX, y: tileY, group: 0, targetType: 'group', targetGroup: 1, deactivate: false, layer: editorBuildLayer });
+        openInvisibleTriggerEditor(editorLevel.invisibleTriggers[editorLevel.invisibleTriggers.length - 1]);
       } else if (selectedTool === 'pulse') {
-        editorLevel.pulseTriggers.push({ x, y, group: 0, targetGroup: 1, speed: 2, mode: 'outer' });
+        editorLevel.pulseTriggers.push({ x: tileX, y: tileY, group: 0, targetGroup: 1, speed: 2, mode: 'outer', layer: editorBuildLayer });
         openPulseEditor(editorLevel.pulseTriggers[editorLevel.pulseTriggers.length - 1]);
       } else if (selectedTool === 'move') {
-        editorLevel.moveTriggers.push({ x, y, group: 0, mode: 'move', targetGroup: 1, direction: 'right', amount: 4, duration: 1.5, followGroup: '2', axis: 'both' });
+        editorLevel.moveTriggers.push({ x: tileX, y: tileY, group: 0, mode: 'move', targetGroup: 1, direction: 'right', amount: 4, duration: 1.5, followGroup: '2', axis: 'both', layer: editorBuildLayer });
         openMoveEditor(editorLevel.moveTriggers[editorLevel.moveTriggers.length - 1]);
+      } else if (selectedTool === 'routePointer') {
+        editorLevel.routePointers.push({ x: tileX, y: tileY, group: 0, number: 1, duration: 1, layer: editorBuildLayer });
+        openRoutePointerEditor(editorLevel.routePointers[editorLevel.routePointers.length - 1]);
+      } else if (selectedTool === 'routeTrigger') {
+        editorLevel.routeTriggers.push({ x: tileX, y: tileY, group: 0, targetGroup: 1, startNumber: 1, endNumber: 3, layer: editorBuildLayer });
+        openRouteTriggerEditor(editorLevel.routeTriggers[editorLevel.routeTriggers.length - 1]);
       } else if (selectedTool === 'start') {
-        editorLevel.start = { ...editorLevel.start, x, y };
+        editorLevel.start = { ...editorLevel.start, x: tileX, y: tileY, layer: 'front' };
       } else if (selectedTool === 'finish') {
-        editorLevel.finish = { ...editorLevel.finish, x, y };
+        editorLevel.finish = { ...editorLevel.finish, x: tileX, y: tileY, layer: 'front' };
       }
 
       invalidateEditorVerification();
@@ -5143,8 +7789,8 @@
       resetRun();
     }
 
-    function saveCurrentLevel() {
-      const name = levelNameValue();
+    function saveCurrentLevel(forcedName = '') {
+      const name = (forcedName || levelNameValue()).trim();
       if (!name) {
         gameMessage.textContent = 'Введите название уровня';
         return;
@@ -5158,6 +7804,8 @@
       });
       refreshSavedLevelsSelect(name);
       gameMessage.textContent = `Уровень успешно сохранён: ${name}`;
+      closeLevelSaveMenu();
+      closeEditorPauseMenu();
     }
 
     function loadSelectedLevel() {
@@ -5198,6 +7846,16 @@
       writeSavedLevels(saved);
       refreshSavedLevelsSelect();
       gameMessage.textContent = `Удалено: ${name}`;
+    }
+
+    function updateTutorialPage(nextIndex = tutorialPageIndex) {
+      tutorialPageIndex = Math.max(0, Math.min(Math.max(0, tutorialPages.length - 1), nextIndex));
+      tutorialPages.forEach((page, index) => page.classList.toggle('active', index === tutorialPageIndex));
+      tutorialDots.forEach((dot, index) => dot.classList.toggle('active', index === tutorialPageIndex));
+      tutorialPageText.textContent = `Страница ${tutorialPageIndex + 1} / ${tutorialPages.length}`;
+      tutorialPrevBtn.disabled = tutorialPageIndex === 0;
+      tutorialNextBtn.textContent = tutorialPageIndex === tutorialPages.length - 1 ? 'Готово' : 'Дальше';
+      requestAnimationFrame(() => renderTutorialScenes());
     }
 
     function saveProfileNickname() {
@@ -5313,10 +7971,95 @@
       drawEditor();
     }
 
+    function canStartEditorSelection(event) {
+      if (!groupAssignMode && !transformSelectionMode) {
+        return false;
+      }
+      if (event.pointerType === 'mouse' && event.button !== 0) {
+        return false;
+      }
+      return true;
+    }
+
+    function beginEditorSelection(event) {
+      const pointer = editorPointerToWorld(event);
+      selectionPointerId = event.pointerId ?? null;
+      selectionDrag = {
+        startX: pointer.x,
+        startY: pointer.y,
+        endX: pointer.x,
+        endY: pointer.y
+      };
+      drawEditor();
+    }
+
+    function updateEditorSelection(event) {
+      if (!selectionDrag) {
+        return;
+      }
+      if (selectionPointerId !== null && event.pointerId !== selectionPointerId) {
+        return;
+      }
+      const pointer = editorPointerToWorld(event);
+      selectionDrag.endX = pointer.x;
+      selectionDrag.endY = pointer.y;
+      drawEditor();
+    }
+
+    function finishEditorSelection() {
+      if (!selectionDrag) {
+        return;
+      }
+      const dragWidth = Math.abs(selectionDrag.endX - selectionDrag.startX);
+      const dragHeight = Math.abs(selectionDrag.endY - selectionDrag.startY);
+      const selection = selectionDrag;
+      selectionDrag = null;
+      selectionPointerId = null;
+      drawEditor();
+      if (dragWidth < 8 && dragHeight < 8) {
+        return;
+      }
+      const selected = uniqueSelectionItems(findObjectsInSelection(selection));
+      if (!selected.length) {
+        return;
+      }
+      skipNextEditorClick = true;
+      if (groupAssignMode) {
+        openMultiGroupEditor(selected.map(({ ref }) => ref));
+      } else if (transformSelectionMode) {
+        selectedTransformObjects = selected;
+        gameMessage.textContent = `Выделено: ${selected.length}. Нажми ${toolLabel(transformSelectionMode)} ещё раз`;
+        drawEditor();
+      }
+    }
+
+    function cancelEditorSelection() {
+      if (!selectionDrag) {
+        return;
+      }
+      selectionDrag = null;
+      selectionPointerId = null;
+      drawEditor();
+    }
+
     document.getElementById('playBtn').addEventListener('click', () => showScreen('play'));
+    document.getElementById('tutorialBtn').addEventListener('click', () => {
+      updateTutorialPage(0);
+      renderTutorialScenes();
+      showScreen('tutorial');
+    });
     document.getElementById('officialLevelsBtn').addEventListener('click', () => showScreen('official'));
     document.getElementById('userLevelsBtn').addEventListener('click', () => showScreen('userLevels'));
     document.getElementById('backToMenuFromPlay').addEventListener('click', () => showScreen('menu'));
+    document.getElementById('backToMenuFromTutorial').addEventListener('click', () => showScreen('menu'));
+    tutorialPrevBtn.addEventListener('click', () => updateTutorialPage(tutorialPageIndex - 1));
+    tutorialNextBtn.addEventListener('click', () => {
+      if (tutorialPageIndex >= tutorialPages.length - 1) {
+        showScreen('menu');
+        return;
+      }
+      updateTutorialPage(tutorialPageIndex + 1);
+    });
     document.getElementById('backToPlayMenu').addEventListener('click', () => showScreen('play'));
     document.getElementById('backToPlayFromUserLevels').addEventListener('click', () => showScreen('play'));
     document.getElementById('playDemo1Btn').addEventListener('click', () => {
@@ -5342,7 +8085,17 @@
       showScreen(gameMode === 'editor-test' ? 'editor' : 'menu');
     });
     document.getElementById('restartBtn').addEventListener('click', () => resetRun(true, true));
-    document.getElementById('backToMenuFromEditor').addEventListener('click', () => showScreen('menu'));
+    editorPauseBtn.addEventListener('click', openEditorPauseMenu);
+    pauseSaveLevelBtn.addEventListener('click', () => {
+      closeEditorPauseMenu();
+      openLevelSaveMenu();
+    });
+    pauseToMenuBtn.addEventListener('click', () => {
+      closeEditorPauseMenu();
+      showScreen('menu');
+    });
+    closeEditorPauseBtn.addEventListener('click', closeEditorPauseMenu);
+    closeLevelSaveBtn.addEventListener('click', closeLevelSaveMenu);
     document.getElementById('testLevelBtn').addEventListener('click', () => showScreen('game', { mode: 'editor-test' }));
     document.getElementById('clearBtn').addEventListener('click', clearLevel);
     saveLevelBtn.addEventListener('click', saveCurrentLevel);
@@ -5352,22 +8105,28 @@
     userLevelsSearch.addEventListener('input', () => refreshUserLevelsSelect(selectedUserLevelName));
     document.getElementById('playUserLevelBtn').addEventListener('click', playSelectedUserLevel);
     saveProfileBtn.addEventListener('click', saveProfileNickname);
+    window.addEventListener('resize', renderTutorialScenes);
     levelMusicSelect.addEventListener('change', () => {
       editorLevel.musicId = musicLibrary[levelMusicSelect.value] ? levelMusicSelect.value : 'pulse-run';
       invalidateEditorVerification();
     });
-    levelNameInput.addEventListener('input', () => {
-      editorLevel.name = levelNameValue() || 'Новый уровень';
+    levelBackgroundInput.addEventListener('input', () => {
+      editorLevel.backgroundColor = levelBackgroundInput.value || '#0c2c47';
       invalidateEditorVerification();
-    });
-    groupModeBtn.addEventListener('click', () => {
-      groupAssignMode = !groupAssignMode;
-      if (groupAssignMode) {
-        showToolPage('debug-1');
-      }
-      syncGroupModeButton();
       drawEditor();
     });
+    if (groupModeBtn) {
+      groupModeBtn.addEventListener('click', () => {
+        groupAssignMode = !groupAssignMode;
+        if (groupAssignMode) {
+          showToolPage('debug-1');
+        }
+        syncGroupModeButton();
+        drawEditor();
+      });
+    }
+    editorFrontLayerBtn.addEventListener('click', () => setEditorLayer('front'));
+    editorBackLayerBtn.addEventListener('click', () => setEditorLayer('back'));
     zoomOutBtn.addEventListener('click', () => setEditorZoom(editorZoom - 0.25));
     zoomInBtn.addEventListener('click', () => setEditorZoom(editorZoom + 0.25));
     document.getElementById('saveGroupBtn').addEventListener('click', () => {
@@ -5387,14 +8146,30 @@
     document.getElementById('closeGroupBtn').addEventListener('click', closeModals);
     document.getElementById('saveTriggerBtn').addEventListener('click', () => {
       if (editedTrigger) {
-        editedTrigger.targetGroup = Math.max(0, Number.parseInt(triggerTargetInput.value || '0', 10) || 0);
-        editedTrigger.color = triggerColorInput.value || '#ff5c6c';
+        if (editedTriggerType === 'invisible') {
+          editedTrigger.targetType = triggerTargetTypeInput.value === 'player' ? 'player' : 'group';
+          editedTrigger.targetGroup = editedTrigger.targetType === 'group'
+            ? Math.max(0, Number.parseInt(triggerTargetInput.value || '0', 10) || 0)
+            : 0;
+          editedTrigger.deactivate = Boolean(triggerDeactivateInput.checked);
+        } else {
+          editedTrigger.targetType = triggerTargetTypeInput.value === 'background'
+            ? 'background'
+            : triggerTargetTypeInput.value === 'ground'
+              ? 'ground'
+              : 'group';
+          editedTrigger.targetGroup = editedTrigger.targetType === 'group'
+            ? Math.max(0, Number.parseInt(triggerTargetInput.value || '0', 10) || 0)
+            : 0;
+          editedTrigger.color = triggerColorInput.value || '#ff5c6c';
+        }
       }
       invalidateEditorVerification();
       closeModals();
       drawEditor();
     });
     document.getElementById('closeTriggerBtn').addEventListener('click', closeModals);
+    triggerTargetTypeInput.addEventListener('change', syncTriggerTargetUi);
     document.getElementById('savePulseBtn').addEventListener('click', () => {
       if (editedPulseTrigger) {
         editedPulseTrigger.targetGroup = Math.max(0, Number.parseInt(pulseTargetInput.value || '0', 10) || 0);
@@ -5471,6 +8246,21 @@
       drawEditor();
     });
     document.getElementById('closeMoveBtn').addEventListener('click', closeModals);
+    document.getElementById('saveRouteBtn').addEventListener('click', () => {
+      if (editedRoutePointer) {
+        editedRoutePointer.number = Math.max(1, Number.parseInt(routePointerNumberInput.value || '1', 10) || 1);
+        editedRoutePointer.duration = Math.max(0.1, Number.parseFloat(routePointerDurationInput.value || '1') || 1);
+      }
+      if (editedRouteTrigger) {
+        editedRouteTrigger.targetGroup = Math.max(0, Number.parseInt(routeTriggerTargetInput.value || '0', 10) || 0);
+        editedRouteTrigger.startNumber = Math.max(1, Number.parseInt(routeTriggerStartInput.value || '1', 10) || 1);
+        editedRouteTrigger.endNumber = Math.max(1, Number.parseInt(routeTriggerEndInput.value || '1', 10) || 1);
+      }
+      invalidateEditorVerification();
+      closeModals();
+      drawEditor();
+    });
+    document.getElementById('closeRouteBtn').addEventListener('click', closeModals);
     document.getElementById('saveDynamicBlockBtn').addEventListener('click', () => {
       if (editedDynamicBlock) {
         editedDynamicBlock.touchGroup = Math.max(0, Number.parseInt(dynamicTouchGroupInput.value || '0', 10) || 0);
@@ -5502,9 +8292,30 @@
         closeModals();
       }
     });
+    routeModal.addEventListener('click', (event) => {
+      if (event.target === routeModal) {
+        closeModals();
+      }
+    });
     dynamicBlockModal.addEventListener('click', (event) => {
       if (event.target === dynamicBlockModal) {
         closeModals();
+      }
+    });
+    editorPauseModal.addEventListener('click', (event) => {
+      if (event.target === editorPauseModal) {
+        closeEditorPauseMenu();
+      }
+    });
+    levelSaveModal.addEventListener('click', (event) => {
+      if (event.target === levelSaveModal) {
+        closeLevelSaveMenu();
+      }
+    });
+    levelNameInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        saveCurrentLevel();
       }
     });
     toolButtons.forEach((button) => button.addEventListener('click', () => setTool(button.dataset.tool)));
@@ -5517,58 +8328,29 @@
     }));
     toolPagePrevBtn.addEventListener('click', () => stepToolPage(-1));
     toolPageNextBtn.addEventListener('click', () => stepToolPage(1));
-    editorCanvas.addEventListener('mousedown', (event) => {
-      if (!groupAssignMode && !transformSelectionMode) {
+    editorCanvas.addEventListener('pointerdown', (event) => {
+      if (!canStartEditorSelection(event)) {
         return;
       }
-      const pointer = editorPointerToWorld(event);
-      selectionDrag = {
-        startX: pointer.x,
-        startY: pointer.y,
-        endX: pointer.x,
-        endY: pointer.y
-      };
-      drawEditor();
+      event.preventDefault();
+      editorCanvas.setPointerCapture?.(event.pointerId);
+      beginEditorSelection(event);
     });
-    editorCanvas.addEventListener('mousemove', (event) => {
-      if (!selectionDrag) {
-        return;
-      }
-      const pointer = editorPointerToWorld(event);
-      selectionDrag.endX = pointer.x;
-      selectionDrag.endY = pointer.y;
-      drawEditor();
+    editorCanvas.addEventListener('pointermove', (event) => {
+      updateEditorSelection(event);
     });
-    editorCanvas.addEventListener('mouseup', () => {
-      if (!selectionDrag) {
+    editorCanvas.addEventListener('pointerup', (event) => {
+      if (selectionPointerId !== null && event.pointerId !== selectionPointerId) {
         return;
       }
-      const dragWidth = Math.abs(selectionDrag.endX - selectionDrag.startX);
-      const dragHeight = Math.abs(selectionDrag.endY - selectionDrag.startY);
-      const selection = selectionDrag;
-      selectionDrag = null;
-      drawEditor();
-      if (dragWidth < 8 && dragHeight < 8) {
-        return;
-      }
-      const selected = uniqueSelectionItems(findObjectsInSelection(selection));
-      if (selected.length) {
-        skipNextEditorClick = true;
-        if (groupAssignMode) {
-          openMultiGroupEditor(selected.map(({ ref }) => ref));
-        } else if (transformSelectionMode) {
-          selectedTransformObjects = selected;
-          gameMessage.textContent = `Выделено: ${selected.length}. Нажми ${toolLabel(transformSelectionMode)} ещё раз`;
-          drawEditor();
-        }
-      }
+      finishEditorSelection();
+      editorCanvas.releasePointerCapture?.(event.pointerId);
     });
-    editorCanvas.addEventListener('mouseleave', () => {
-      if (!selectionDrag) {
-        return;
+    editorCanvas.addEventListener('pointercancel', cancelEditorSelection);
+    editorCanvas.addEventListener('pointerleave', () => {
+      if (selectionPointerId === null) {
+        cancelEditorSelection();
       }
-      selectionDrag = null;
-      drawEditor();
     });
     editorCanvas.addEventListener('click', editTile);
     editorScroll.addEventListener('input', (event) => {
@@ -5596,6 +8378,7 @@
     window.visualViewport?.addEventListener('resize', scheduleResponsiveRefresh);
 
     setTool(selectedTool);
+    syncEditorLayerUi();
     syncGroupModeButton();
     syncMoveModeUi();
     applyEditorLevelMeta();
@@ -5604,6 +8387,7 @@
     refreshUserLevelsSelect();
     loadRemoteUserLevels();
     refreshProfileUi();
+    renderTutorialScenes();
     syncEditorScroll();
     drawEditor();
     drawGame();
